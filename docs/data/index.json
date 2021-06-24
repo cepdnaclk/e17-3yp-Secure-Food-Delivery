@@ -1,26 +1,27 @@
 {
+    "title": "Secure Food Delivery",
     "team": [
         {
-            "name": "Team Member Name 1",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx",
-            "github_profile":"#",
+            "name": "Pathum T.N.D.",
+            "email": "e17240@eng.pdn.ac.lk",
+            "eNumber": "E/17/240",
+            "github_profile":"https://github.com/NadeeshaDiw",
+            "linkedin_profile":"https://www.linkedin.com/in/nadiw/",
+            "website": "#"
+        },
+        {
+            "name": "Wijesinghe W.D.L.P.",
+            "email": "e17405@eng.pdn.ac.lk",
+            "eNumber": "E/17/405",
+            "github_profile":"https://github.com/Wijesinghe0141",
             "linkedin_profile":"#",
             "website": "#"
         },
         {
-            "name": "Team Member Name 2",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx",
-            "github_profile":"#",
-            "linkedin_profile":"#",
-            "website": "#"
-        },
-        {
-            "name": "Team Member Name 3",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx",
-            "github_profile":"#",
+            "name": "Ekanayake E.M.M.U.B.",
+            "email": "e17083@eng.pdn.ac.lk",
+            "eNumber": "E/17/083",
+            "github_profile":"https://github.com/MahelaEkanayake",
             "linkedin_profile":"#",
             "website": "#"
         }
