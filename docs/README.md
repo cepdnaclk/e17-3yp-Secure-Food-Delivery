@@ -16,7 +16,8 @@ title: Secure Food Delivery
 ## Team
 -  E/17/240, Pathum T.N.D., [e17240@eng.pdn.ac.lk](mailto:e17240@eng.pdn.ac.lk)
 -  E/17/405, Wijesinghe W.D.L.P., [e17405@eng.pdn.ac.lk](mailto:e17405@eng.pdn.ac.lk)
--  eNumber, Name, [email](mailto:name@email.com)
+-  E/17/083, Ekanayake E.M.M.U.B., [e17083@eng.pdn.ac.lk](mailto:e17083@eng.pdn.ac.lk)
+
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
