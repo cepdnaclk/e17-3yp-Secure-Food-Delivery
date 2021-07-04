@@ -8,7 +8,7 @@ ___
 * [Introduction](#introduction)
 * [Current Problem](#Current-Problem)
 * [Solution](#Solution)
-* [Group Members](#Group Members)
+* [Group Members](#Group-Members)
 
 # Introduction
 
