@@ -4,6 +4,10 @@ ___
 
 [**Here is our website!!**](https://cepdnaclk.github.io/e17-3yp-Secure-Food-Delivery/)
 
+* [Introduction](#introduction)
+* [Current Problem](#Current Problem)
+* [Solution](#Solution)
+
 # Introduction
 
 As we are really busy with our day-to-day life, almost everyone is like to have their meal wherever and whenever they want. So, online food delivery services are really famous and very popular among people. There are so many food delivery services in Sri Lanka and there are huge beneficiaries also. We are providing some extra service for those delivery services such that they can improve their security issues which must be solved before it becomes a disadvantage for such great service.
