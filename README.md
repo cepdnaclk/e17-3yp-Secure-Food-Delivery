@@ -28,13 +28,13 @@ As it becomes a real-world problem, we thought about having a solution. Basicall
   
   <div id="Group Members" >
     <div class="inline-block">
-        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17083.jpg" align="left" width="240" height="240">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17083.jpg" align="left" width="200" height="200">
     </div>
     <div class="inline-block">
-        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17240.jpg" align="center" width="240" height="240">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17240.jpg" align="center" width="200" height="200">
     </div>
     <div class="inline-block">
-       <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17405.jpg" align="right"  width="240" height="240">
+       <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17405.jpg" align="right"  width="200" height="200">
     </div>
 </div>
 
