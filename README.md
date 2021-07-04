@@ -22,8 +22,8 @@ We saw some complaints and some news about 'not delivering the ordered food acco
 As it becomes a real-world problem, we thought about having a solution. Basically, we provide a locking system for the food container which can only be accessible from two ends. The person from restaurant side providing food can unlock the container using a RFID card and put the order into it. After locking the container, it can only be unlocked by the customer using an OTP or a RFID card or both. That must satisfy customers as it cannot be opened within delivery. So, they can trust about whatever they buy. 
 
 # Group Members
-* E/17/083 [e17083@eng.pdn.ac.lk](mailto:e17083@eng.pdn.ac.lk)- Ekanayake E.M.M.U.B.
-* E/17/240 [e17240@eng.pdn.ac.lk](mailto:e17240@eng.pdn.ac.lk)- Pathum T.N.D.
+* E/17/083 [e17083@eng.pdn.ac.lk](mailto:e17083@eng.pdn.ac.lk) - Ekanayake E.M.M.U.B.
+* E/17/240 [e17240@eng.pdn.ac.lk](mailto:e17240@eng.pdn.ac.lk) - Pathum T.N.D.
 * E/17/405 [e17405@eng.pdn.ac.lk](mailto:e17405@eng.pdn.ac.lk) - Wijesinghe W.D.L.P.
   
 ### Enable GitHub Pages
