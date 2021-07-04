@@ -34,7 +34,7 @@ As it becomes a real-world problem, we thought about having a solution. Basicall
         <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17240.jpg" align="left" width="250" height="250">
     </div>
     <div class="inline-block">
-       <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17405.jpg" alt= " "  width="230" height="250">
+       <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17405.jpg" alt= " "  width="250" height="250">
     </div>
 </div>
 
