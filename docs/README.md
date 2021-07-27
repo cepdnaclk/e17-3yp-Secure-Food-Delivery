@@ -53,7 +53,17 @@ Testing done on hardware and software, detailed + summarized results
 
 ## Estimated Timeline
 
-
+<!--div id="Group Members" >
+    <div class="inline-block">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17083.jpg" align="left" width="250" height="250">
+    </div>
+    <div class="inline-block">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17240.jpg" align="left" width="250" height="250">
+    </div>
+    <div class="inline-block">
+       <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17405.jpg" alt= " "  width="250" height="250">
+    </div>
+</div-->
 
 ## Estimated Budget
 
