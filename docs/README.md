@@ -51,6 +51,10 @@ Detailed designs with many sub-sections
 
 Testing done on hardware and software, detailed + summarized results
 
+## Estimated Timeline
+
+
+
 ## Estimated Budget
 
 All items and costs
@@ -77,10 +81,10 @@ What was achieved, future developments, commercialization plans
 
 ## Links
 
-- [Project Repository](https://github.com/cepdnaclk/e17-3yp-Secure-Food-Delivery){:target="_blank"}
-- [Project Page](https://cepdnaclk.github.io/e17-3yp-Secure-Food-Delivery/){:target="_blank"}
-- [Department of Computer Engineering](http://www.ce.pdn.ac.lk/){:target="_blank"}
-- [University of Peradeniya](https://eng.pdn.ac.lk/){:target="_blank"}
+- [Project Repository](https://github.com/cepdnaclk/e17-3yp-Secure-Food-Delivery)
+- [Project Page](https://cepdnaclk.github.io/e17-3yp-Secure-Food-Delivery/)
+- [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
+- [University of Peradeniya](https://eng.pdn.ac.lk/)
 
 [//]: # (Please refer this to learn more about Markdown syntax)
 [//]: # (https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)
