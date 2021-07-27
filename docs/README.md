@@ -55,9 +55,22 @@ Testing done on hardware and software, detailed + summarized results
 
 All items and costs
 
-| Item          | Quantity  | Unit Cost  | Total  |
-| ------------- |:---------:|:----------:|-------:|
-| TTGO T-Call ESP32 SIM800L   | 1         | 3200     | 3200 |
+| Item                        | Quantity  | Unit Cost  | Total  |
+| --------------------------- |:---------:|:----------:|-------:|
+| TTGO T-Call ESP32 SIM800L   | 1         | 3200       | 3200   |
+| RFID RC522                  | 1         |  600       |  600   |
+| 12V DC Solenoid Lock        | 1         | 1000       | 1000   |
+| LCD 2004 Display            | 1         |  850       |  850   |
+| 3.7V Li-ion battery 3300mAh | 3         |  550       | 1650   |
+| Breadboard                  | 1         |  400       |  400   |
+| Single Channel 5V relay     | 1         |  550       |  550   |
+| I2C Serial interface Module | 1         |  200       |  200   |
+| DC-DC Boost Converter       | 1         |  150       |  150   |
+| DC-DC Buck Converter        | 2         |  200       |  400   |
+| Other items                 | 1         | 1000       | 1000   |
+| -------------------------   | :-------: | :--------: | :----: |
+| Total                       |           |            | 10000   |
+
 
 ## Conclusion
 
