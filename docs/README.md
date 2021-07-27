@@ -51,13 +51,13 @@ Detailed designs with many sub-sections
 
 Testing done on hardware and software, detailed + summarized results
 
-## Detailed budget
+## Estimated Budget
 
 All items and costs
 
 | Item          | Quantity  | Unit Cost  | Total  |
 | ------------- |:---------:|:----------:|-------:|
-| Sample item   | 5         | 10 LKR     | 50 LKR |
+| TTGO T-Call ESP32 SIM800L   | 1         | 3200     | 3200 |
 
 ## Conclusion
 
