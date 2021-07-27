@@ -51,18 +51,28 @@ Detailed designs with many sub-sections
 
 Testing done on hardware and software, detailed + summarized results
 
+## Solution Architecture
+
+<div>
+    <div class="inline-block">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.jpg" width="1000" height="600" align="center">
+    </div>
+</div>
+
+## Control and Dataflow
+
+<div>
+    <div class="inline-block">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.jpg" width="1000" height="600" align="center">
+    </div>
+</div>
+
 ## Estimated Timeline
 
 <div>
     <div class="inline-block">
         <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.jpg" width="1000" height="600" align="center">
     </div>
-    <!--div class="inline-block">
-        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17240.jpg" align="left" width="250" height="250">
-    </div>
-    <div class="inline-block">
-       <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17405.jpg" alt= " "  width="250" height="250">
-    </div-->
 </div>
 
 ## Estimated Budget
