@@ -67,9 +67,8 @@ All items and costs
 | I2C Serial interface Module | 1         |  200       |  200   |
 | DC-DC Boost Converter       | 1         |  150       |  150   |
 | DC-DC Buck Converter        | 2         |  200       |  400   |
-| Other items                 | 1         | 1000       | 1000   |
-| -------------------------   | :-------: | :--------: | :----: |
-| Total                       |           |            | 10000   |
+| Other items                 | -         |  -         | 1000   |
+| Total                       |           |            | 10000  |
 
 
 ## Conclusion
