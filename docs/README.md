@@ -28,11 +28,13 @@ title: Secure Food Delivery
 #### Table of Contents
 1. [Introduction](#introduction)
 2. [Solution Architecture](#solution-architecture )
-3. [Hardware & Software Designs](#hardware-and-software-designs)
-4. [Testing](#testing)
-5. [Detailed budget](#detailed-budget)
-6. [Conclusion](#conclusion)
-7. [Links](#links)
+3. [Control and Dataflow](#control-and-dataflow)
+4. [Hardware & Software Designs](#hardware-and-software-designs)
+5. [Testing](#testing)
+6. [Estimated budget](#estimated-budget)
+7. [Estimated Timeline](#estimated-timeline)
+8. [Conclusion](#conclusion)
+9. [Links](#links)
 
 ## Introduction
 
@@ -42,17 +44,6 @@ Description of the real world problem and solution, impact
 ## Solution Architecture
 
 High level diagram + description
-
-## Hardware and Software Designs
-
-Detailed designs with many sub-sections
-
-## Testing
-
-Testing done on hardware and software, detailed + summarized results
-
-## Solution Architecture
-
 <div>
     <div class="inline-block">
         <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/SolutionArchitecture.png" align="center">
@@ -67,13 +58,15 @@ Testing done on hardware and software, detailed + summarized results
     </div>
 </div>
 
-## Estimated Timeline
+## Hardware and Software Designs
 
-<div>
-    <div class="inline-block">
-        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.jpg" width="1000" height="600" align="center">
-    </div>
-</div>
+Detailed designs with many sub-sections
+
+## Testing
+
+Testing done on hardware and software, detailed + summarized results
+
+
 
 ## Estimated Budget
 
@@ -94,6 +87,14 @@ All items and costs
 | Other items                 | -         |  -         | 1000   |
 | Total                       |           |            | 10000  |
 
+
+## Estimated Timeline
+
+<div>
+    <div class="inline-block">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.jpg" width="1000" height="600" align="center">
+    </div>
+</div>
 
 ## Conclusion
 
