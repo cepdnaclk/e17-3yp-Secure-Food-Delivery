@@ -52,8 +52,12 @@ Detailed designs with many sub-sections
 Testing done on hardware and software, detailed + summarized results
 
 ## Estimated Timeline
-
-<div id="Group Members" >
+<style>
+	body{ margin:0px }
+	div#middle > div{ float:left; width:100%; }
+	div#middle > div > div > img{ width:100%; }
+</style>
+<div id="middle" >
     <div class="inline-block">
         <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.png" style="width:100%; height: 100%;" align="center">
     </div>
