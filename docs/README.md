@@ -52,14 +52,10 @@ Detailed designs with many sub-sections
 Testing done on hardware and software, detailed + summarized results
 
 ## Estimated Timeline
-<style>
-	body{ margin:0px }
-	div#middle > div{ float:left; width:100%; }
-	div#middle > div > div > img{ width:100%; }
-</style>
-<div id="middle" >
+
+<div>
     <div class="inline-block">
-        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.png" style="width:100%; height: 100%;" align="center">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.png" width="500" height="300" align="center">
     </div>
     <!--div class="inline-block">
         <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17240.jpg" align="left" width="250" height="250">
