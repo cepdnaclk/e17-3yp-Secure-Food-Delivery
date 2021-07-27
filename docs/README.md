@@ -55,7 +55,7 @@ Testing done on hardware and software, detailed + summarized results
 
 <div>
     <div class="inline-block">
-        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.png" width="500" height="300" align="center">
+        <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/timeline.jpg" width="500" height="300" align="center">
     </div>
     <!--div class="inline-block">
         <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/E17240.jpg" align="left" width="250" height="250">
