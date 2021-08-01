@@ -48,11 +48,11 @@ As it becomes a real-world problem, we thought about having a solution. Basicall
 ## Solution Architecture
 
 High level diagram + description
-<div>
+<html><body><div>
     <div class="inline-block">
         <img src ="https://github.com/LahiruPathum0141/e17-3yp-Secure-Food-Delivery/blob/main/docs/images/SolutionArchitecture.png" align="center">
     </div>
-</div>
+</div></body></html>
 
 ## Control and Dataflow
 
