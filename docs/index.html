@@ -151,7 +151,13 @@
                             <div class="line"></div>
                             <h3 class="title">Current Scenario</h3>
                         </div> <!-- section title -->
-                        <p class="text">As we are really busy with our day-to-day life, almost everyone is like to have their meal wherever and whenever they want. So, online food delivery services are really famous and very popular among people. There are so many food delivery services in Sri Lanka and there are huge beneficiaries also.</p>
+                        <div style="text-align:justify; text-justify:auto;">
+                            <p class="text">
+                                As we are really busy with our day-to-day life, almost everyone is like to have their meal wherever and whenever they want.
+                                <br><br> 
+                                So, online food delivery services are really famous and very popular among people. There are so many food delivery services in Sri Lanka and there are huge beneficiaries also.
+                            </p>
+                        </div>
                     </div> <!-- about content -->
                 </div>
                 <div class="col-lg-6">
@@ -180,7 +186,17 @@
                             <div class="line"></div>
                             <h3 class="title">Motivation</h3>
                         </div> <!-- section title -->
-                        <p class="text">There are some services, that are providing online food delivery services already. But, there are some serious issues regarding those services. The main thing is about security (Reliability/Trust). In this particular area, those questions 'How far do we can trust those services? as a customer and 'How far do we can trust those services? as a restaurant owner can occur. There are two major roles here. The first one is the restaurant owners who provide food through delivery services and the second one is the customer who orders food through delivery service (Website or Mobile App). We saw some complaints and some news about stating 'not delivering the ordered food accordingly' from the customers. Also, we could see those restaurant owners could not do anything about it since the delivery service provides the service of delivery. But they have an issue with their customer's trust. This becomes a problem in good service and we want to give a solution that would help to develop the online food delivery services more reliable.</p>
+                        <div style="text-align:justify; text-justify:auto;">
+                            <p class="text">
+                                There are some services, that are providing online food delivery services already. But, there are some serious issues regarding those services. The main thing is about security (Reliability/Trust). 
+                                <br><br>
+                                In this particular area, those questions 'How far do we can trust those services? as a customer and 'How far do we can trust those services? as a restaurant owner can occur. 
+                                <br><br>
+                                There are two major roles here. The first one is the restaurant owners who provide food through delivery services and the second one is the customer who orders food through delivery service (Website or Mobile App). 
+                                <br><br>
+                                We saw some complaints and some news about stating 'not delivering the ordered food accordingly' from the customers. Also, we could see those restaurant owners could not do anything about it since the delivery service provides the service of delivery. But they have an issue with their customer's trust. This becomes a problem in good service and we want to give a solution that would help to develop the online food delivery services more reliable.
+                            </p>
+                        </div>
                     </div> <!-- about content -->
                 </div>
                 <div class="col-lg-6 order-lg-first">
@@ -203,7 +219,15 @@
                             <div class="line"></div>
                             <h3 class="title">Our Solution</h3>
                         </div> <!-- section title -->
-                        <p class="text">As it becomes a real-world problem, we thought about having a solution for that. We provide a smart locking system for the food delivery carrier, which can only be accessible from two ends. The person from the restaurant side providing food can unlock the container using an RFID card and put the order into it. After locking the container, it can only be unlocked by the customer using an OTP or an RFID card, or both. That must satisfy customers as it can't be opened within the delivery. So, they can trust whatever they buy. And also both client and customer have proof about the delivery.</p>
+                        <div style="text-align:justify; text-justify:auto;">
+                            <p class="text">
+                                As it becomes a real-world problem, we thought about having a solution for that. 
+                                <br><br>
+                                We provide a smart locking system for the food delivery carrier, which can only be accessible from two ends. The person from the restaurant side providing food can unlock the container using an RFID card and put the order into it. After locking the container, it can only be unlocked by the customer using an OTP or an RFID card, or both. 
+                                <br><br>
+                                That must satisfy customers as it can't be opened within the delivery. So, they can trust whatever they buy. And also both client and customer have proof about the delivery.
+                            </p>
+                        </div>
                     </div> <!-- about content -->
                 </div>
                 <div class="col-lg-6">
@@ -241,8 +265,13 @@
                                 <div class="section-title">
                                     <h3 class="title"><span>Solution Architecture</span></h3>
                                 </div> <!-- section title -->
-                                <p class="text"><span>The solution architecture consists of both software and hardware node. In the software node, there is an API that is responsible for handle data. Also, there is a mobile APP that will use to access the lock, and the client system is the one that assigns a particular order to the related delivery carrier.</span>
-                                <span>In the hardware node, using a microcontroller, the carrier will be locked with a digital lock. To unlock the delivery carrier, an RFID tag or OTP will use through the mobile app. If there is an unauthorized opening then it will be detected. By using an LCD display, the necessary information such as OrderID that is in the carrier at that moment; will be displayed.</span></p>
+                                <div style="text-align:justify; text-justify:auto;">
+                                    <p class="text" style="text-justify:auto;">
+                                        <span>The solution architecture consists of both software and hardware node. In the software node, there is an API that is responsible for handle data. Also, there is a mobile APP that will use to access the lock, and the client system is the one that assigns a particular order to the related delivery carrier.</span>
+                                        <br><br>
+                                        <span>In the hardware node, using a microcontroller, the carrier will be locked with a digital lock. To unlock the delivery carrier, an RFID tag or OTP will use through the mobile app. If there is an unauthorized opening then it will be detected. By using an LCD display, the necessary information such as OrderID that is in the carrier at that moment; will be displayed.</span>
+                                    </p>
+                                </div>
                             </div> <!-- about content -->
                         </div>
                     </div>
@@ -269,11 +298,23 @@
                                 <div class="section-title">
                                     <h3 class="title"><span>Control and Data flow</span></h3>
                                 </div> <!-- section title -->
-                                <p class="text"><span>In the control and data flow, there are three significant roles in the system. They are restaurant admin, regular customers, and delivery riders.</span></p>
-                                <p class="text"><span>Once a regular customer ordered foods through the existing online food delivery service system, he will get an Order-ID. Then on the restaurant side, the restaurant admin will confirm the order and put the order in one of the available motorbike carriers by using provided RFID tag for that restaurant. In this process, the restaurant admin will confirm the order with that particular Carrier-ID. Then, the mobile number of that regular customer who ordered the food; will be sent to the SFD API with the Order-ID and Carrier-ID.</span></p>
-                                <p class="text"><span>In the SFD API, the OTP (One-Time-Password) will send to the customer. Also, API will search for the mobile number in the database to check whether that customer has registered for the RFID tag, then if yes, the relevant RFID code will send to the microcontroller.</span><span>Once the regular customer logs into SFD's app, and if he entered the correct OTP then an unlocking signal will be sent to the microcontroller through the API. Here is the delivery rider's job once he confirms that particular order has arrived at the customer's place, then only the locker is available for the customer to unlock. Until then, the customer is not allowed to open the delivery carrier and that will display to the customer through the mobile app.</span></p>
-                                <p class="text"><span>Here is the delivery rider's job once he confirms that particular order has arrived at the customer's place, then only the locker is available for the customer to unlock. Until then, the customer is not allowed to open the delivery carrier and that will display to the customer through the mobile app.</span></p>
-                                <p class="text"><span>In the locking system, there is an unauthorized opening detection unit for the delivery carrier. Whenever the delivery carrier opened, it will generate an interrupt signal, if the unlocking signal from the API is not present at the microcontroller, it will alert the API as an unauthorized opening. Otherwise, the interrupt will ignore.</span><span>The current status of the delivery carrier will display through the LED indicators, and the current order's Order-ID will display on the LCD screen.</span></p>
+                                <div style="text-align:justify; text-justify:auto;">
+                                    <p class="text">
+                                        <span>In the control and data flow, there are three significant roles in the system. They are restaurant admin, regular customers, and delivery riders.</span>
+                                        <br><br>
+                                        <span>Once a regular customer ordered foods through the existing online food delivery service system, he will get an Order-ID. Then on the restaurant side, the restaurant admin will confirm the order and put the order in one of the available motorbike carriers by using provided RFID tag for that restaurant. In this process, the restaurant admin will confirm the order with that particular Carrier-ID. Then, the mobile number of that regular customer who ordered the food; will be sent to the SFD API with the Order-ID and Carrier-ID.</span>
+                                        <br><br>
+                                        <span>In the SFD API, the OTP (One-Time-Password) will send to the customer. Also, API will search for the mobile number in the database to check whether that customer has registered for the RFID tag, then if yes, the relevant RFID code will send to the microcontroller.</span>
+                                        <br><br>
+                                        <span>Once the regular customer logs into SFD's app, and if he entered the correct OTP then an unlocking signal will be sent to the microcontroller through the API. Here is the delivery rider's job once he confirms that particular order has arrived at the customer's place, then only the locker is available for the customer to unlock. Until then, the customer is not allowed to open the delivery carrier and that will display to the customer through the mobile app.</span>
+                                        <br><br>
+                                        <span>Here is the delivery rider's job once he confirms that particular order has arrived at the customer's place, then only the locker is available for the customer to unlock. Until then, the customer is not allowed to open the delivery carrier and that will display to the customer through the mobile app.</span>
+                                        <br><br>
+                                        <span>In the locking system, there is an unauthorized opening detection unit for the delivery carrier. Whenever the delivery carrier opened, it will generate an interrupt signal, if the unlocking signal from the API is not present at the microcontroller, it will alert the API as an unauthorized opening. Otherwise, the interrupt will ignore.</span>
+                                        <br><br>
+                                        <span>The current status of the delivery carrier will display through the LED indicators, and the current order's Order-ID will display on the LCD screen.</span>
+                                    </p>
+                                </div>
                             </div> <!-- about content -->
                         </div>
                     </div>
@@ -462,7 +503,7 @@
                 <div class="col-lg-10">
                     <div class="section-title text-center pb-10">
                         <div class="line m-auto"></div>
-                        <h3 class="title">Estimated Budjet</h3>
+                        <h3 class="title">Budget</h3>
                     </div> <!-- section title -->
                 </div>
             </div> <!-- row -->
@@ -711,3 +752,4 @@
 </body>
 
 </html>
+
