@@ -1,4 +1,36 @@
-<!DOCTYPE html>
+<?php 
+	require_once("connection.php");
+    session_start();
+
+	if (isset($_POST['sign-up-customer'])) {
+		$TelNo =mysqli_real_escape_string($connection,$_POST['number']);
+		$CName =mysqli_real_escape_string($connection,$_POST['name']);
+		$CPassword =mysqli_real_escape_string($connection,$_POST['password']);
+
+		$query = "insert into customer(TelNo, CName, CPassword) values('$TelNo', '$CName', '$CPassword')";
+		$excecute = mysqli_query($connection,$query);
+
+		if($excecute){
+			header("Location:index.html");
+		}
+	}
+
+	if (isset($_POST['sign-up-partner'])) {
+		$Email =mysqli_real_escape_string($connection,$_POST['email']);
+		$RestName =mysqli_real_escape_string($connection,$_POST['name']);
+		$PPassword =mysqli_real_escape_string($connection,$_POST['password']);
+		
+		$query = "insert into partner(Email, RestName, PPassword) values('$Email', '$RestName', '$PPassword')";
+		$excecute = mysqli_query($connection,$query);
+
+		if($excecute){
+			header("Location:index.html");
+		}
+	}
+	
+ ?>
+
+ <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
@@ -9,10 +41,7 @@
     <!-- Styles -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
-    <link href="css/bootstrap.css" rel="stylesheet">
-    <link href="css/fontawesome-all.css" rel="stylesheet">
-    <link href="css/swiper.css" rel="stylesheet">
-	<link href="css/magnific-popup.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
 	<link href="css/styles.css" rel="stylesheet">
 	
 	<!-- Favicon  -->
@@ -62,7 +91,7 @@
                         <div class="tab-pane fade show active" id="customer" role="tabpanel" aria-labelledby="home-tab">
                             <div class="text-box mt-3 mb-3">
                                 <!-- Sign Up Form -->
-                                <form action="php/signUp.php" method="post" id="signUpFormCustomer">
+                                <form action="signUp.php" method="post" id="signUpFormCustomer">
                                     <p class="p-large">Register as a customer to place orders.</p>
                                     <div class="form-group">
                                         <input type="text" class="form-control-input" id="name" name="name" required>
@@ -86,7 +115,7 @@
                         <div class="tab-pane fade" id="partner" role="tabpanel" aria-labelledby="profile-tab">
                             <div class="text-box mt-3 mb-3">
                                 <!-- Sign Up Form -->
-                                <form action="php/signUp.php" method="post" id="signUpFormPartner">
+                                <form action="signUp.php" method="post" id="signUpFormPartner">
                                     <p class="p-large">Register as a partner to get register your restaurant.</p>
                                     <div class="form-group">
                                         <input type="text" class="form-control-input" id="name" name="name" required>
@@ -114,11 +143,9 @@
     <!-- end of basic -->
     	
     <!-- Scripts -->
-    <script src="js/jquery.min.js"></script> <!-- jQuery for Bootstrap's JavaScript plugins -->
-    <script src="js/bootstrap.min.js"></script> <!-- Bootstrap framework -->
-    <script src="js/jquery.easing.min.js"></script> <!-- jQuery Easing for smooth scrolling between anchors -->
-    <script src="js/jquery.magnific-popup.js"></script> <!-- Magnific Popup for lightboxes -->
-    <script src="js/swiper.min.js"></script> <!-- Swiper for image and text sliders -->
-    <script src="js/scripts.js"></script> <!-- Custom scripts -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-Piv4xVNRyMGpqkS2by6br4gNJ7DXjqk09RmUpJ8jgGtD7zP9yug3goQfGII0yAns" crossorigin="anonymous"></script>
 </body>
 </html>
+
+<?php mysqli_close($connection); ?>
