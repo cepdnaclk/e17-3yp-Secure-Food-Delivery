@@ -58,6 +58,7 @@ a:focus,
 a:hover {
   text-decoration: none; }
 
+
 i,
 span,
 a {
@@ -100,6 +101,18 @@ h5 {
 h6 {
   font-size: 16px; }
 
+
+@font-face {
+  font-family: Berkshire;
+  src: url(../fonts/BerkshireSwash-Regular.ttf);
+}
+
+#bannerTitle{
+
+  font-family: Berkshire;
+}
+
+
 ul, ol {
   margin: 0px;
   padding: 0px;
@@ -112,12 +125,18 @@ p {
   color: #6A6972;
   margin: 0px; }
 
+
 .bg_cover {
   background-position: center center;
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
   height: 100%; }
+
+#logo {
+
+  width : 80%;
+}
 
 /*===== All Slick Slide Outline Style =====*/
 .slick-slide {
@@ -1036,6 +1055,14 @@ p {
       -ms-transform: translate(-50%, -50%);
       -o-transform: translate(-50%, -50%);
       transform: translate(-50%, -50%); }
+
+video{
+
+  display: block;
+  margin: 1em auto;
+  width: 80%;
+  height: calc(.5625 * 63vw);
+}
 
 .counter-wrapper {
   padding-left: 70px; }
