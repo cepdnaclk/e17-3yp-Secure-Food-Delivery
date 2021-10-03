@@ -1,5 +1,7 @@
 const ConnectDB = require('../middleware/database');
 const Order = require('../middleware/models');
+const mapper = require('../middleware/ordersMap');
+const sms = require('../middleware/sms');
 const Joi = require('joi');
 const express = require('express');
 const router = express.Router();
@@ -22,14 +24,27 @@ router.post('/new-order', async (req, res) => {
     //put the data into database
     //send processing message
     let sql = `INSERT INTO orders VALUES("${req.body.orderid}", "${req.body.ctelno}", "${req.body.deviceid}")`;
-    ConnectDB.query(sql, (err, result) => {
+    ConnectDB.query(sql, async (err, result) => {
         if (err) return res.status(406).send("duplicated entry");
         else {
             let order = new Order(req.body.orderid, req.body.ctelno, req.body.deviceid);
-            let otp = order.generateOTP;
+            let otp_num = order.generateOTP();
 
-            
-            res.status(201).send("order being delivering");
+            sms.sendOTP(req.body.ctelno, otp_num); // send OTP through sms
+
+            let sql = `CALL device_mqtt("${req.body.deviceid}")`;
+            ConnectDB.query(sql, async (err, result) => {
+                if (err) return console.log(err.message);
+                else {
+                    let mqttid = result[0].mqttID;
+                    mqtt.orders(mqttid, req.body.orderid, '');  //sends rfid tag code along with the device id and order id to device
+                }
+            });
+
+            mapper.add(req.body.orderid, order); // add new order obj into server's ds
+
+            let state = order.viewState();
+            res.status(200).send(`order state ${state}`);
         }
     });
 
@@ -43,15 +58,8 @@ router.get('/order-state/:orderid', async (req, res) => {
     let { error } = schema.validate(req.params.orderid);
     if (error) return res.status(400).send(error);
 
-    //get the satus of the order from the database
-    //send back the status of the order to client
-    let sql = `SELECT state FROM order_handle WHERE orderID = "${req.params.orderid}"`;
-    ConnectDB.query(sql, (err, result) => {
-        if (err) res.status(404).send(err);
-        else {
-            res.status(200).send(result);
-        }
-    });
+    let state = mapper.find(req.params.orderid).viewState();
+    res.status(200).send(state);
 
 });
 
