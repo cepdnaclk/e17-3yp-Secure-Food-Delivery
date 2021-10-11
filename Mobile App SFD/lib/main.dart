@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+// import 'package:flutter_driver/driver_extension.dart';
+// import 'package:driver_extensions/driver_extensions.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'src/welcomePage.dart';
 
 void main() {
+  // enableFlutterDriverExtension();
   runApp(MyApp());
 }
 
