@@ -1,8 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'Widget/bezierContainer.dart';
+import 'package:flutter/services.dart';
+import 'package:http/http.dart';
+import 'dart:convert';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'WelcomePage.dart';
 import 'orderList.dart';
-import 'signupRider.dart';
+import 'Widget/body.dart';
+import 'Widget/appbar.dart';
+import 'Widget/textForm.dart';
+import 'Widget/bottomlink.dart';
+import 'Widget/submitbutton.dart';
 
 class LoginPageRider extends StatefulWidget {
   LoginPageRider({Key? key, required this.title}) : super(key: key);
@@ -14,252 +22,155 @@ class LoginPageRider extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPageRider> {
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-      },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(
-                left: 0,
-                top: 10,
-                bottom: 10,
-              ),
-              child: Icon(
-                Icons.keyboard_arrow_left,
-                color: Colors.black,
-              ),
-            ),
-            Text('Back',
-                style: TextStyle(
-                  fontSize: 12,
-                  fontWeight: FontWeight.w600,
-                ))
-          ],
-        ),
-      ),
-    );
-  }
+  final GlobalKey<FormState> _formKeyLoginRider = GlobalKey<FormState>();
 
-  Widget _entryField(String title, {bool isPassword = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    );
+  TextEditingController contact = TextEditingController();
+  TextEditingController password = TextEditingController();
+
+  // bool _isLoading = false;
+
+  Future postData(String mobno, String password) async {
+    var token;
+    SharedPreferences riderToken = await SharedPreferences.getInstance();
+    try {
+      final response = await post(
+        Uri.parse('https://35.171.26.170/api/auth/rider'),
+        // Uri.parse('https://jsonplaceholder.typicode.com/posts'),
+        body: {
+          'mobno': mobno,
+          'password': password,
+        },
+      );
+      if (response.statusCode == 200) {
+        token = jsonDecode(response.body);
+        setState(() {
+          // _isLoading = false;
+          riderToken.setString("riderToken", token['mobno']);
+        });
+      }
+      print(response.statusCode);
+      print(response.body);
+      return response.statusCode;
+      // return 200;
+    } catch (err) {}
   }
 
   Widget _submitButton() {
     return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => OrderList(
-                      title: '',
-                    )));
-      },
-      child: Container(
-        width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(vertical: 13),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(5)),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                  color: Colors.grey.shade200,
-                  offset: Offset(2, 4),
-                  blurRadius: 5,
-                  spreadRadius: 2)
-            ],
-            gradient: LinearGradient(
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
-                colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-        child: Text(
-          'Login',
-          style: TextStyle(fontSize: 20, color: Colors.white),
-        ),
-      ),
-    );
+        onTap: () async {
+          if (_formKeyLoginRider.currentState!.validate()) {
+            _formKeyLoginRider.currentState!.save();
+            print(contact.text);
+            print(password.text);
+            // setState(() {
+            //   _isLoading = true;
+            // });
+            var statusCode = await postData(contact.text, password.text);
+            if (statusCode == 200) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Login Successfully!!!'),
+                  content: const Text(''),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => OrderList(
+                            title: '',
+                          ),
+                        ),
+                      ),
+                      child: const Text('Ok'),
+                    ),
+                  ],
+                ),
+              );
+            } else if (statusCode == 400) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Login Error!!!'),
+                  content: const Text('Incorrect Credentials'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WelcomePage(
+                                    title: '',
+                                  ))),
+                      child: const Text('Go to Main Page'),
+                    ),
+                  ],
+                ),
+              );
+            } else {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Something Went Wrong!!!'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Try Again'),
+                    ),
+                  ],
+                ),
+              );
+            }
+          }
+        },
+        child: SubmitButton(buttontext: "Login"));
   }
 
-  Widget _divider() {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Row(
-        children: <Widget>[
-          SizedBox(
-            width: 20,
-          ),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
-          ),
-          Text('or'),
-          Expanded(
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 10),
-              child: Divider(
-                thickness: 1,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 20,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _createAccountLabel() {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => SignUpPageRider(
-                      title: '',
-                    )));
-      },
-      child: Container(
-        margin: EdgeInsets.symmetric(vertical: 20),
-        padding: EdgeInsets.all(15),
-        alignment: Alignment.bottomCenter,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Text(
-              'Don\'t have an account ?',
-              style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600),
-            ),
-            SizedBox(
-              width: 10,
-            ),
-            Text(
-              'Register',
-              style: TextStyle(
-                  color: Color(0xfff79c4f),
-                  fontSize: 13,
-                  fontWeight: FontWeight.w600),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _subTitle() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        text: 'Rider Login ',
-        style: GoogleFonts.portLligatSans(
-          textStyle: Theme.of(context).textTheme.headline4,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: Color(0xffff6600),
-        ),
-      ),
-    );
-  }
-
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'Secure ',
-          style: GoogleFonts.portLligatSans(
-            textStyle: Theme.of(context).textTheme.headline4,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Color(0xffe46b10),
-          ),
-          children: [
-            TextSpan(
-              text: 'Food ',
-              style: TextStyle(color: Colors.black, fontSize: 30),
-            ),
-            TextSpan(
-              text: 'Delivery',
-              style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
-            ),
-          ]),
-    );
-  }
-
-  Widget _emailPasswordWidget() {
+  Widget _widget() {
+    final height = MediaQuery.of(context).size.height;
     return Column(
       children: <Widget>[
-        _entryField("Mobile Number :"),
-        _entryField("Device ID :", isPassword: true),
+        SizedBox(height: 20),
+        TextForm(
+          namecontroller: contact,
+          name: "Contact Number",
+          keyboardtype: TextInputType.number,
+          maxlen: 10,
+          hint: "Enter Contact Number Here",
+          icon: Icon(Icons.phone_android),
+          filter: FilteringTextInputFormatter.allow(RegExp(r"[0-9]")),
+          passwordtrue: false,
+        ),
+        TextForm(
+          namecontroller: password,
+          name: "Password",
+          keyboardtype: TextInputType.visiblePassword,
+          maxlen: 10,
+          hint: "Enter Password Here",
+          icon: Icon(Icons.security_sharp),
+          filter: FilteringTextInputFormatter.allow(
+              RegExp(r"[A-Za-z0-9,.:;!<>?=@#$%&*()_+/-[]")),
+          passwordtrue: true,
+        ),
+        SizedBox(height: height * 0.31),
+        _submitButton(),
+        BottomLink(
+            navigate: "SignUpPageRider",
+            description: "Don\'t have an account ?",
+            link: "Register")
       ],
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-        body: Container(
-      height: height,
-      child: Stack(
-        children: <Widget>[
-          Positioned(
-              top: -height * .15,
-              right: -MediaQuery.of(context).size.width * .4,
-              child: BezierContainer()),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  SizedBox(height: height * .25),
-                  _title(),
-                  SizedBox(height: 20),
-                  _subTitle(),
-                  SizedBox(height: 30),
-                  _emailPasswordWidget(),
-                  SizedBox(height: 20),
-                  _submitButton(),
-                  SizedBox(height: 20),
-                  _divider(),
-                  SizedBox(height: 30),
-                  _createAccountLabel(),
-                ],
-              ),
-            ),
-          ),
-          Positioned(top: 40, left: 0, child: _backButton()),
-        ],
-      ),
-    ));
+    return DefaultTabController(
+        length: 1,
+        child: Scaffold(
+            appBar: Appbar(subtitle: "Rider Login"),
+            body: Safearea(formkey: _formKeyLoginRider, body: _widget())));
   }
 }
