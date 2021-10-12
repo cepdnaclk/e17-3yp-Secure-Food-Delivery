@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:example_flutter_project/src/Widget/bezierContainer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'dart:convert';
+import 'package:http/http.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import 'WelcomePage.dart';
+import 'Widget/appbar.dart';
+import 'loginPageRider.dart';
+import 'Widget/bezierContainer.dart';
 
 class OrderList extends StatefulWidget {
   OrderList({Key? key, required this.title}) : super(key: key);
@@ -12,28 +19,183 @@ class OrderList extends StatefulWidget {
 }
 
 class _OrderListState extends State<OrderList> {
-  Widget _backButton() {
-    return InkWell(
-      onTap: () {
-        Navigator.pop(context);
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  var listData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginRider();
+    _getOrderList();
+  }
+
+  Future _getOrderList() async {
+    var orderList;
+    try {
+      final response = await get(
+        Uri.parse('https://35.171.26.170/api/order_handle/list'),
+        headers: {'x-authtoken': getToken()},
+      );
+
+      if (response.statusCode == 200) {
+        orderList = jsonDecode(response.body) as List;
+        listData = orderList;
+      }
+      print(response.statusCode);
+      print(response.body);
+      return response.statusCode;
+    } catch (err) {}
+  }
+
+  Future _confirmOrder(String orderid) async {
+    try {
+      final response = await post(
+          Uri.parse(
+              'https://35.171.26.170/api/order_handle/confirmed/' + orderid),
+          headers: {'x-authtoken': getToken()},
+          body: {'orderid': orderid});
+
+      print(response.statusCode);
+      print(response.body);
+      return response.statusCode;
+    } catch (err) {}
+  }
+
+  _checkLoginRider() async {
+    SharedPreferences riderToken = await SharedPreferences.getInstance();
+    if (riderToken.getString("riderToken") == null) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => LoginPageRider(title: '')));
+    }
+  }
+
+  getToken() async {
+    SharedPreferences riderToken = await SharedPreferences.getInstance();
+    String? token = riderToken.getString('riderToken');
+    return token;
+  }
+
+  clearToken() async {
+    SharedPreferences riderToken = await SharedPreferences.getInstance();
+    riderToken.remove('riderToken');
+  }
+
+  Widget _orderList() {
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      itemCount: listData.length,
+      itemBuilder: (BuildContext context, int index) {
+        final item = listData[index];
+        return Card(
+            elevation: 8.0,
+            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.blue.shade200,
+                //color: Color.fromRGBO(64, 75, 96, .9),
+                //borderRadius: BorderRadius.all(Radius.circular(25)),
+              ),
+              child: ListTile(
+                  contentPadding:
+                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
+                  leading: Container(
+                    padding: EdgeInsets.only(right: 12.0),
+                    decoration: new BoxDecoration(
+                        border: new Border(
+                            right: new BorderSide(
+                                width: 1.0, color: Colors.black))),
+                    child: Icon(Icons.delivery_dining, color: Colors.black),
+                  ),
+                  title: Text(item["title"],
+                      style: TextStyle(
+                          color: Colors.black, fontWeight: FontWeight.bold)),
+                  // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
+
+                  subtitle: Row(
+                    children: <Widget>[
+                      // Icon(Icons.linear_scale, color: Colors.blue.shade900),
+                      Text(item["title"][0],
+                          style: TextStyle(color: Colors.black))
+                    ],
+                  ),
+                  trailing: IconButton(
+                    icon: Icon(Icons.keyboard_arrow_right),
+                    onPressed: () async {
+                      var statusCode = await _confirmOrder(item['title']);
+                      if (statusCode == 201) {
+                        showDialog<String>(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                                    title:
+                                        const Text('Confirmed Successfully!!!'),
+                                    // content: const Text(''),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () => Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                                builder: (context) =>
+                                                    OrderList(title: ''))),
+                                        child: const Text('Ok'),
+                                      ),
+                                      TextButton(
+                                          onPressed: () {
+                                            clearToken();
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        WelcomePage(
+                                                            title: '')));
+                                          },
+                                          child: const Text('Go to Main Page'))
+                                    ]));
+                      } else if (statusCode == 400) {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Incorrect Order!!!'),
+                            // content: const Text('Incorrect Credentials'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            OrderList(title: ''))),
+                                child: const Text('Ok'),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        showDialog<String>(
+                          context: context,
+                          builder: (BuildContext context) => AlertDialog(
+                            title: const Text('Something Went Wrong!!!'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('Try Again'),
+                              ),
+                            ],
+                          ),
+                        );
+                      }
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => OrderList(title: '')));
+                    },
+                    color: Colors.black,
+                  )),
+            ));
       },
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 10),
-        child: Row(
-          children: <Widget>[
-            Container(
-              padding: EdgeInsets.only(left: 0, top: 10, bottom: 10),
-              child: Icon(Icons.keyboard_arrow_left, color: Colors.black),
-            ),
-            Text('Back',
-                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500))
-          ],
-        ),
-      ),
     );
   }
 
-  Widget _orderArrived() {
+  Widget _orderConfirm() {
     return Container(
       width: MediaQuery.of(context).size.width,
       padding: EdgeInsets.symmetric(vertical: 15),
@@ -58,84 +220,33 @@ class _OrderListState extends State<OrderList> {
     );
   }
 
-  Widget _subTitle() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-        text: 'Orders',
-        style: GoogleFonts.portLligatSans(
-          textStyle: Theme.of(context).textTheme.headline4,
-          fontSize: 20,
-          fontWeight: FontWeight.w600,
-          color: Color(0xffff6600),
-        ),
-      ),
-    );
-  }
-
-  Widget _title() {
-    return RichText(
-      textAlign: TextAlign.center,
-      text: TextSpan(
-          text: 'Secure ',
-          style: GoogleFonts.portLligatSans(
-            // ignore: deprecated_member_use
-            textStyle: Theme.of(context).textTheme.display1,
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-            color: Color(0xffe46b10),
-          ),
-          children: [
-            TextSpan(
-              text: 'Food ',
-              style: TextStyle(color: Colors.black, fontSize: 30),
-              //style: TextStyle(color: Colors.black, fontSize: 30),
-            ),
-            TextSpan(
-              text: 'Delivery',
-              style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
-              //style: TextStyle(color: Color(0xffe46b10), fontSize: 30),
-            ),
-          ]),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-    return Scaffold(
-      body: Container(
-        height: height,
-        child: Stack(
-          children: <Widget>[
-            Positioned(
-              top: -MediaQuery.of(context).size.height * .15,
-              right: -MediaQuery.of(context).size.width * .4,
-              child: BezierContainer(),
-            ),
-            Container(
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    SizedBox(height: height * .25),
-                    _title(),
-                    SizedBox(height: 20),
-                    _subTitle(),
-                    SizedBox(height: 30),
-                    SizedBox(
-                      height: 400,
-                    ),
-                    _orderArrived(),
-                    SizedBox(height: height * .14),
-                  ],
+    return DefaultTabController(
+      length: 1,
+      child: Scaffold(
+        appBar: Appbar(subtitle: "Orders"),
+        body: SafeArea(
+          child: Container(
+            height: height,
+            child: Stack(
+              children: <Widget>[
+                Positioned(
+                  top: -MediaQuery.of(context).size.height * .15,
+                  right: -MediaQuery.of(context).size.width * .4,
+                  child: BezierContainer(),
                 ),
-              ),
+                Container(
+                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  child: Form(
+                    key: _formKey,
+                    child: _orderList(),
+                  ),
+                ),
+              ],
             ),
-            Positioned(top: 40, left: 0, child: _backButton()),
-          ],
+          ),
         ),
       ),
     );
