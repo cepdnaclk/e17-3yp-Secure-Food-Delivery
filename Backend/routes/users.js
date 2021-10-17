@@ -42,11 +42,18 @@ router.post('/rider', async (req, res) => {
     let password = req.body.password;
     password = await bcrypt.hash(password, salt);
 
-    let sql = `INSERT INTO reg_rider VALUES ("${req.body.mobno}", "${req.body.rname}", "${req.body.deviceid}", "${password}")`;
+    let sql = `SELECT mobNo FROM reg_rider WHERE reg_rider.deviceID = "${req.body.deviceid}"`;
     ConnectDB.query(sql, (err, result) => {
-        if (!err) return res.send(`registered ${req.body.mobno}`);
-        return res.status(406).send(`faild to register ${req.body.mobno}`);
+        if (err | result.length) return res.status(400).send(`cannot register for ${req.body.deviceid}`);
+        else {
+            sql = `INSERT INTO reg_rider VALUES ("${req.body.mobno}", "${req.body.rname}", "${req.body.deviceid}", "${password}")`;
+            ConnectDB.query(sql, (err, result) => {
+                if (!err) return res.send(`registered ${req.body.mobno}`);
+                return res.status(406).send(`faild to register ${req.body.mobno}`);
+            });
+        }
     });
+
 });
 
 
