@@ -1,6 +1,5 @@
 const authen = require('../middleware/authenticate');
 const mapper = require('../middleware/ordersMap');
-const ConnectDB = require('../middleware/database');
 const mqtt = require('../middleware/mqttclient');
 const Joi = require('joi');
 const express = require('express');
@@ -21,14 +20,8 @@ router.post('/unlock', authen, (req, res) => {
     // state validation
     if (state != 'confirmed') return res.status(401).send('error : rider on the way.. needs to confirm');
     else {
-        let sql = `CALL device_mqtt("${order_obj.deviceid}")`;
-        ConnectDB.query(sql, (err, result) => {
-            if (err) return console.log(err.message);
-            else {
-                let mqttid = result[0].mqttID;
-                mqtt.unLockingSignal(mqttid, true);  // send device to unlock signal
-            }
-        });
+        var data = { unlockNow: true };
+        mqtt.send2device(order_obj.deviceid, data); //sends unlocking signal to device
         order_obj.done();
         mapper.del(req.user.orderid);
         return res.send(`unlocked ${order_obj.deviceid}`);
