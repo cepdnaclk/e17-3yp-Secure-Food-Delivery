@@ -54,9 +54,20 @@ class Order {
 
     confirm() {
         this.state = 'confirmed';
-        let timer = setTimeout(function () { cancelled(); }, 900000);
+        let timer = setTimeout(() => {
+            let sql = `CALL delivery_cancelled("${this.id}")`;
+            ConnectDB.query(sql, (err, result) => {
+                if (err) return console.log(err.message);
+                else {
+                    this.state = 'cancelled';
+                    otp.sendMessage(this.telno, "cancelled", this.id);
+                    mapper.del(this.id);
+                    return;
+                }
+            });
+        }, 900000);
         let check = setInterval(function () {
-            if (this.state === 'done') {
+            if (this.state == 'done') {
                 clearTimeout(timer);
                 clearInterval(check);
             }
