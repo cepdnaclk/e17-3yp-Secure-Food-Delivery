@@ -2,10 +2,11 @@
     require_once("connection.php");
     session_start();
 
-    $result_err = $query_err = "";
+    $result_err = $query_err = $result_err2 = $query_err2 = "";
 
     if (isset($_POST['login-customer'])) {
         $TelNo = mysqli_real_escape_string($connection,$_POST['number']);
+        $address = mysqli_real_escape_string($connection,$_POST['address']);
         $CPassword = mysqli_real_escape_string($connection,$_POST['password']);
 
         $query = "select TelNo, CName, CPassword from customer where TelNo='{$TelNo}' and CPassword='{$CPassword}'";
@@ -15,7 +16,9 @@
         if ($excecute) {
             if (mysqli_num_rows($excecute)==1) {
                 $_SESSION['Name'] = $result['CName'];
-                header("Location:index.html");
+                $_SESSION['TelNo'] = $result['TelNo'];
+                $_SESSION['address'] = $address;
+                header("Location:shops.php");
             }
             else{$result_err = "*Invalid User ID or Password";}
         }
@@ -35,9 +38,9 @@
                 $_SESSION['Name'] = $result['RestName'];
                 header("Location:partner.php");
             }
-            else{$result_err = "*Invalid User ID or Password";}
+            else{$result_err2 = "*Invalid User ID or Password";}
         }
-        else{$query_err = "*Database query failed";}
+        else{$query_err2 = "*Database query failed";}
     }
     
  ?>
@@ -105,13 +108,20 @@
                                 <!-- Sign Up Form -->
                                 <form action="login.php" method="post" id="signUpFormCustomer">
                                     <p class="p-large">Sign-In to place your orders</p>
-                                    <?php echo "<div style=\"color: red;\"><b>". $query_err . "</b></div>"; ?>
-                                    <?php echo "<div style=\"color: red;\"><b>". $result_err . "</b></div>"; ?>
+                                    <?php echo "<div style=\"color: red;\"><b>". $query_err2 . "</b></div>"; ?>
+                                    <?php echo "<div style=\"color: red;\"><b>". $result_err2 . "</b></div>"; ?>
                                     <div class="form-group">
+                                        <hr style="height:0px; visibility:hidden;" />
                                         <input type="tel" class="form-control-input" id="number" name="number" maxlength="10" required>
                                         <label class="label-control" for="number">Mobile Number</label>
                                     </div>
                                     <div class="form-group">
+                                        <hr style="height:0px; visibility:hidden;" />
+                                        <input type="text" class="form-control-input" id="address" name="address" maxlength="100" required>
+                                        <label class="label-control" for="address">Address</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <hr style="height:0px; visibility:hidden;" />
                                         <input type="password" class="form-control-input" id="password" name="password" maxlength="20" required>
                                         <label class="label-control" for="password">Password</label>
                                     </div>
@@ -131,10 +141,12 @@
                                     <?php echo "<div style=\"color: red;\"><b>". $query_err . "</b></div>"; ?>
                                     <?php echo "<div style=\"color: red;\"><b>". $result_err . "</b></div>"; ?>
                                     <div class="form-group">
+                                        <hr style="height:0px; visibility:hidden;" />
                                         <input type="email" class="form-control-input" id="email" name="email" maxlength="30" required>
                                         <label class="label-control" for="email">E-Mail</label>
                                     </div>
                                     <div class="form-group">
+                                        <hr style="height:0px; visibility:hidden;" />
                                         <input type="password" class="form-control-input" id="password" name="password" maxlength="20" required>
                                         <label class="label-control" for="password">Password</label>
                                     </div>
