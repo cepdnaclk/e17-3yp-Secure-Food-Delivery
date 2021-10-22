@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'loginPageUser.dart';
 import 'loginPageRider.dart';
@@ -14,6 +15,18 @@ class WelcomePage extends StatefulWidget {
 }
 
 class _WelcomePageState extends State<WelcomePage> {
+  @override
+  void initState() {
+    super.initState();
+    clearToken();
+  }
+
+  clearToken() async {
+    SharedPreferences Token = await SharedPreferences.getInstance();
+    Token.remove('riderToken');
+    Token.remove('userToken');
+  }
+
   Widget _title() {
     return RichText(
       textAlign: TextAlign.center,

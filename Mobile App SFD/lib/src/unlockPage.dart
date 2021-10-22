@@ -1,6 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'WelcomePage.dart';
@@ -33,33 +35,30 @@ class _UnlockPageState extends State<UnlockPage> {
   checkLoginUser() async {
     SharedPreferences userToken = await SharedPreferences.getInstance();
     if (userToken.getString("userToken") == null) {
-      // userToken.setString("errUser", "err");
-
       Navigator.push(context,
           MaterialPageRoute(builder: (context) => LoginPageUser(title: '')));
     }
   }
 
-  getToken() async {
+  Future<http.Response> postData(String otp) async {
     SharedPreferences userToken = await SharedPreferences.getInstance();
     String? token = userToken.getString('userToken');
-    return token;
-  }
 
-  Future postData(String otp) async {
-    try {
-      final response = await post(
-        // Uri.parse('https://192.168.1.10/api/order_access/unlock'),
-        Uri.parse('https://jsonplaceholder.typicode.com/posts'),
-        body: {
-          'otp': otp,
-        },
-      );
-      print(response.statusCode);
-      print(response.body);
-      // return response.statusCode;
-      return 200;
-    } catch (err) {}
+    Map<String, String> data = {"otp": otp};
+    final body = jsonEncode(data);
+
+    final response = await http.post(
+      Uri.parse("https://35.171.26.170/api/order_access/unlock"),
+      headers: {
+        "Content-Type": "application/json",
+        "x-authtoken": token.toString(),
+        "Connection": "keep-alive"
+      },
+      body: body,
+    );
+    print(response.statusCode);
+    print(response.body.toString());
+    return response;
   }
 
   Widget _submitButton() {
@@ -68,17 +67,15 @@ class _UnlockPageState extends State<UnlockPage> {
           if (_formKeyUnlock.currentState!.validate()) {
             _formKeyUnlock.currentState!.save();
             print(otp.text);
-            var statusCode = await postData(otp.text);
-            if (statusCode == 200) {
+            final http.Response response = await postData(otp.text);
+            if (response.statusCode == 200) {
               SharedPreferences userToken =
                   await SharedPreferences.getInstance();
               userToken.remove("userToken");
-              // userToken.remove("errUser");
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Successfully Unlocked!!!'),
-                  content: const Text(''),
+                  title: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.push(
@@ -92,52 +89,52 @@ class _UnlockPageState extends State<UnlockPage> {
                   ],
                 ),
               );
-              // } else if (statusCode == 400 || statusCode == 401) {
-              //   showDialog<String>(
-              //     context: context,
-              //     builder: (BuildContext context) => AlertDialog(
-              //       title: const Text('Error!!!'),
-              //       content: const Text('Incorrect Credentials'),
-              //       actions: <Widget>[
-              //         TextButton(
-              //           onPressed: () => Navigator.pop(context),
-              //           child: const Text('Cancel'),
-              //         ),
-              //         TextButton(
-              //           onPressed: () => Navigator.push(
-              //               context,
-              //               MaterialPageRoute(
-              //                   builder: (context) => WelcomePage(
-              //                         title: '',
-              //                       ))),
-              //           child: const Text('Go to Main Page'),
-              //         ),
-              //       ],
-              //     ),
-              //   );
-              // } else if (statusCode == 404) {
-              //   showDialog<String>(
-              //     context: context,
-              //     builder: (BuildContext context) => AlertDialog(
-              //       title: const Text('Login Error!!!'),
-              //       content: const Text('Order Processed Already'),
-              //       actions: <Widget>[
-              //         TextButton(
-              //           onPressed: () => Navigator.pop(context),
-              //           child: const Text('Cancel'),
-              //         ),
-              //         TextButton(
-              //           onPressed: () => Navigator.push(
-              //               context,
-              //               MaterialPageRoute(
-              //                   builder: (context) => WelcomePage(
-              //                         title: '',
-              //                       ))),
-              //           child: const Text('Go to Main Page'),
-              //         ),
-              //       ],
-              //     ),
-              //   );
+            } else if (response.statusCode == 400) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Error!!!'),
+                  content: const Text('Access Denied'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WelcomePage(
+                                    title: '',
+                                  ))),
+                      child: const Text('Go to Main Page'),
+                    ),
+                  ],
+                ),
+              );
+            } else if (response.statusCode == 401) {
+              showDialog<String>(
+                context: context,
+                builder: (BuildContext context) => AlertDialog(
+                  title: const Text('Login Error!!!'),
+                  content: const Text('Rider on the way.\nNeeds to confirm.'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => WelcomePage(
+                                    title: '',
+                                  ))),
+                      child: const Text('Go to Main Page'),
+                    ),
+                  ],
+                ),
+              );
             } else {
               showDialog<String>(
                 context: context,
@@ -182,7 +179,10 @@ class _UnlockPageState extends State<UnlockPage> {
     return DefaultTabController(
       length: 1,
       child: Scaffold(
-          appBar: Appbar(subtitle: "Unlock Your Order"),
+          appBar: Appbar(
+            subtitle: "Unlock Your Order",
+            previous: "regcustomer",
+          ),
           body: Safearea(formkey: _formKeyUnlock, body: _widget())),
     );
   }

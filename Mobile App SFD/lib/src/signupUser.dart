@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'WelcomePage.dart';
 import 'Widget/body.dart';
@@ -26,21 +27,24 @@ class _SignUpPageState extends State<SignUpPageUser> {
   TextEditingController address = TextEditingController();
   TextEditingController email = TextEditingController();
 
-  Future postData(
+  Future<http.Response> postData(
       String cname, String mobno, String caddress, String email) async {
-    try {
-      final response = await post(
-          Uri.parse("https://35.171.26.170/api/users/customer"),
-          body: {
-            "cname": cname,
-            "mobno": mobno,
-            "caddress": caddress,
-            "email": email
-          });
-      print(response.body);
-      print(response.statusCode);
-      return response.statusCode;
-    } catch (err) {}
+    Map<String, String> data = {
+      "cname": cname,
+      "mobno": mobno,
+      "caddress": caddress,
+      "email": email
+    };
+    final body = jsonEncode(data);
+    final response = await http.post(
+      Uri.parse("https://35.171.26.170/api/users/customer"),
+      headers: {"Content-Type": "application/json"},
+      body: body,
+    );
+
+    print(response.body);
+    print(response.statusCode);
+    return response;
   }
 
   Widget _submitButton() {
@@ -52,15 +56,14 @@ class _SignUpPageState extends State<SignUpPageUser> {
             print(contact.text);
             print(email.text);
             print(address.text);
-            var statusCode = await postData(
+            final http.Response response = await postData(
                 name.text, contact.text, address.text, email.text);
-            if (statusCode == 200) {
+            if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Registered Successfully!!!'),
-                  content:
-                      const Text('Let\'s Login to the Secure Food Delivery'),
+                  content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.push(
@@ -76,12 +79,12 @@ class _SignUpPageState extends State<SignUpPageUser> {
                   ],
                 ),
               );
-            } else if (statusCode == 400) {
+            } else if (response.statusCode == 400) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Register Error'),
-                  content: const Text('Incorrect Inputs'),
+                  content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -99,12 +102,12 @@ class _SignUpPageState extends State<SignUpPageUser> {
                   ],
                 ),
               );
-            } else if (statusCode == 406) {
+            } else if (response.statusCode == 406) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Register Error'),
-                  content: const Text('Failed to Register'),
+                  content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -202,7 +205,10 @@ class _SignUpPageState extends State<SignUpPageUser> {
     return DefaultTabController(
       length: 1,
       child: Scaffold(
-          appBar: Appbar(subtitle: "Customer Register"),
+          appBar: Appbar(
+            subtitle: "Customer Register",
+            previous: "regcustomer",
+          ),
           body: Safearea(formkey: _formKeySignupUser, body: _widget())),
     );
   }
