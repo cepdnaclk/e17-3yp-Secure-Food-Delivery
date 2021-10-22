@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'WelcomePage.dart';
 import 'orderList.dart';
+import 'WelcomePage.dart';
 import 'Widget/body.dart';
 import 'Widget/appbar.dart';
 import 'Widget/textForm.dart';
@@ -27,32 +27,45 @@ class _LoginPageState extends State<LoginPageRider> {
   TextEditingController contact = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  // bool _isLoading = false;
+  @override
+  void initState() {
+    super.initState();
+    _checkLoginRider();
+  }
 
-  Future postData(String mobno, String password) async {
+  _checkLoginRider() async {
+    SharedPreferences riderToken = await SharedPreferences.getInstance();
+    if (riderToken.getString("mobnoRider") != null) {
+      contact.text = riderToken.getString("mobnoRider")!;
+    }
+    if (riderToken.getString("riderToken") != null) {
+      if (riderToken.getBool('login') == true) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OrderList(title: '')));
+      }
+    }
+  }
+
+  Future<http.Response> postData(String mobno, String password) async {
     var token;
     SharedPreferences riderToken = await SharedPreferences.getInstance();
-    try {
-      final response = await post(
-        Uri.parse('https://35.171.26.170/api/auth/rider'),
-        // Uri.parse('https://jsonplaceholder.typicode.com/posts'),
-        body: {
-          'mobno': mobno,
-          'password': password,
-        },
-      );
-      if (response.statusCode == 200) {
-        token = jsonDecode(response.body);
-        setState(() {
-          // _isLoading = false;
-          riderToken.setString("riderToken", token['mobno']);
-        });
-      }
-      print(response.statusCode);
-      print(response.body);
-      return response.statusCode;
-      // return 200;
-    } catch (err) {}
+    riderToken.setString("mobnoRider", contact.text);
+    Map<String, String> data = {"mobno": mobno, "password": password};
+    final body = jsonEncode(data);
+    final response = await http.post(
+      Uri.parse("https://35.171.26.170/api/auth/rider"),
+      headers: {"Content-Type": "application/json"},
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      token = response.body;
+      print(token);
+      setState(() {
+        riderToken.setString("riderToken", token);
+      });
+    }
+    print(response.statusCode);
+    return response;
   }
 
   Widget _submitButton() {
@@ -65,13 +78,13 @@ class _LoginPageState extends State<LoginPageRider> {
             // setState(() {
             //   _isLoading = true;
             // });
-            var statusCode = await postData(contact.text, password.text);
-            if (statusCode == 200) {
+            final http.Response response =
+                await postData(contact.text, password.text);
+            if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Login Successfully!!!'),
-                  content: const Text(''),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.push(
@@ -87,7 +100,7 @@ class _LoginPageState extends State<LoginPageRider> {
                   ],
                 ),
               );
-            } else if (statusCode == 400) {
+            } else if (response.statusCode == 400) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
@@ -170,7 +183,10 @@ class _LoginPageState extends State<LoginPageRider> {
     return DefaultTabController(
         length: 1,
         child: Scaffold(
-            appBar: Appbar(subtitle: "Rider Login"),
+            appBar: Appbar(
+              subtitle: "Rider Login",
+              previous: "welcome",
+            ),
             body: Safearea(formkey: _formKeyLoginRider, body: _widget())));
   }
 }

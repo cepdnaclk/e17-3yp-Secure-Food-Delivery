@@ -114,6 +114,7 @@ class TextForm extends StatelessWidget {
                 hintText: hint,
                 hintStyle: TextStyle(fontSize: 13),
                 border: InputBorder.none,
+                // fillColor: Colors.transparent,
                 fillColor: Color(0xfff3f3f4),
                 filled: true),
           ),

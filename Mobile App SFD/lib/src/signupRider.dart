@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 import 'WelcomePage.dart';
 import 'Widget/body.dart';
@@ -26,21 +27,24 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
   TextEditingController deviceid = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  Future postData(
+  Future<http.Response> postData(
       String rname, String mobno, String deviceid, String password) async {
-    try {
-      final response = await post(
-          Uri.parse('https://35.171.26.170:443/api/users/rider'),
-          body: {
-            "rname": rname,
-            "mobno": mobno,
-            "deviceid": deviceid,
-            "password": password
-          });
-      print(response.body);
-      // return response.statusCode;
-      return 200;
-    } catch (err) {}
+    Map<String, String> data = {
+      "rname": rname,
+      "mobno": mobno,
+      "deviceid": deviceid,
+      "password": password
+    };
+    final body = jsonEncode(data);
+    final response = await http.post(
+      Uri.parse("https://35.171.26.170/api/users/rider"),
+      headers: {"Content-Type": "application/json"},
+      body: body,
+    );
+
+    print(response.body);
+    print(response.statusCode);
+    return response;
   }
 
   Widget _submitButton() {
@@ -52,15 +56,14 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
             print(contact.text);
             print(deviceid.text);
             print(password.text);
-            var statusCode = await postData(
+            final http.Response response = await postData(
                 name.text, contact.text, deviceid.text, password.text);
-            if (statusCode == 200) {
+            if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Registered Successfully!!!'),
-                  content:
-                      const Text('Let\'s Login to the Secure Food Delivery'),
+                  content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.push(
@@ -76,35 +79,35 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
                   ],
                 ),
               );
-            } else if (statusCode == 400) {
+            } else if (response.statusCode == 400) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Register Error'),
-                  content: const Text('Incorrect Inputs'),
+                  content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
-                      onPressed: () => Navigator.pop(context),
                       child: const Text('Cancel'),
+                      onPressed: () => Navigator.pop(context),
                     ),
                     TextButton(
+                      child: const Text('Go to Main Page'),
                       onPressed: () => Navigator.push(
                           context,
                           MaterialPageRoute(
                               builder: (context) => WelcomePage(
                                     title: '',
                                   ))),
-                      child: const Text('Go to Main Page'),
                     ),
                   ],
                 ),
               );
-            } else if (statusCode == 406) {
+            } else if (response.statusCode == 406) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Register Error'),
-                  content: const Text('Failed to Register'),
+                  content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -197,7 +200,10 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
     return DefaultTabController(
       length: 1,
       child: Scaffold(
-          appBar: Appbar(subtitle: "Rider register"),
+          appBar: Appbar(
+            subtitle: "Rider register",
+            previous: "regrider",
+          ),
           body: Safearea(formkey: _formKeySignupRider, body: _widget())),
     );
   }
