@@ -3,8 +3,10 @@
     session_start();
 
     $orders = "";
+    $restaurent = $_SESSION['Name'];
+    $date = date("Ymd");
 
-    $query = "select orderid,CTelNo,details,sfd from placeorder where placedorder=0"; 
+    $query = "select orderid,CTelNo,details,sfd from placeorder where placedorder=0 and restaurent='{$restaurent}' and _date='{$date}'"; 
     $execute = mysqli_query($connection,$query);
 
     if($execute){
@@ -40,7 +42,7 @@
 <body data-spy="scroll" data-target=".fixed-top" style="background: url('images/header-background.png') center center no-repeat">
 
     <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg fixed-top navbar-light">
+    <nav class="navbar navbar-expand-lg fixed-top navbar-light" style="background-color: aliceblue;">
         <div class="container">
 
             <!-- Image Logo -->
@@ -57,9 +59,20 @@
                             <!--a class="btn-solid-sm page-scroll" href="log-in.html">Sign-In</a-->
                         </span>
                     </li>
+                    <li>
+                        <span class="nav-item">
+                            <a class="btn-solid-sm page-scroll" href="orderState.php">Check Status</a>
+                        </span>
+                    </li>
+                    <li>
+                        <span class="nav-item">
+                            <a class="btn-solid-sm page-scroll" href="logout.php?id=100">Log-out</a>
+                        </span>
+                    </li>
                 </ul>
                 
             </div> <!-- end of navbar-collapse -->
+
         </div> <!-- end of container -->
     </nav> <!-- end of navbar -->
     <!-- end of navigation -->
@@ -69,6 +82,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-xl-10 offset-xl-1 text-center">
+                    <br>
                     <h1 class="text-center">Check out all the available orders</h1>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->

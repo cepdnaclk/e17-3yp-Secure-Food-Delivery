@@ -1,12 +1,24 @@
+import 'package:example_flutter_project/src/orderList.dart';
 import 'package:flutter/material.dart';
-// import 'package:flutter_driver/driver_extension.dart';
-// import 'package:driver_extensions/driver_extensions.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:io';
+
 import 'src/welcomePage.dart';
 
 void main() {
-  // enableFlutterDriverExtension();
+  WidgetsFlutterBinding.ensureInitialized();
+  HttpOverrides.global = MyHttpOverrides();
   runApp(MyApp());
+}
+
+class MyHttpOverrides extends HttpOverrides {
+  @override
+  HttpClient createHttpClient(SecurityContext? context) {
+    return super.createHttpClient(context)
+      ..badCertificateCallback =
+          (X509Certificate cert, String host, int port) => true;
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -22,8 +34,6 @@ class MyApp extends StatelessWidget {
           ),
         ),
         debugShowCheckedModeBanner: false,
-        home: WelcomePage(
-          title: '',
-        ));
+        home: WelcomePage(title: ''));
   }
 }

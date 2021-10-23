@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'dart:convert';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'WelcomePage.dart';
-import 'Widget/appbar.dart';
+import 'Widget/appbarrider.dart';
+import 'Widget/submitbutton.dart';
 import 'loginPageRider.dart';
 import 'Widget/bezierContainer.dart';
 
@@ -19,7 +19,7 @@ class OrderList extends StatefulWidget {
 }
 
 class _OrderListState extends State<OrderList> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKeyOrderList = GlobalKey<FormState>();
   var listData = [];
 
   @override
@@ -29,36 +29,40 @@ class _OrderListState extends State<OrderList> {
     _getOrderList();
   }
 
-  Future _getOrderList() async {
+  Future<http.Response> _getOrderList() async {
+    SharedPreferences riderToken = await SharedPreferences.getInstance();
+    riderToken.setBool('login', true);
     var orderList;
-    try {
-      final response = await get(
-        Uri.parse('https://35.171.26.170/api/order_handle/list'),
-        headers: {'x-authtoken': getToken()},
-      );
-
-      if (response.statusCode == 200) {
-        orderList = jsonDecode(response.body) as List;
-        listData = orderList;
-      }
-      print(response.statusCode);
-      print(response.body);
-      return response.statusCode;
-    } catch (err) {}
+    final response = await http.get(
+      Uri.parse('https://35.171.26.170/api/order_handle/list'),
+      headers: {'x-authtoken': riderToken.getString('riderToken').toString()},
+    );
+    print(riderToken.getString('riderToken').toString());
+    if (response.statusCode == 200) {
+      orderList = jsonDecode(response.body) as List;
+      listData = orderList;
+      print(listData);
+      print(riderToken.getString('riderToken').toString());
+    }
+    print(response.statusCode);
+    print(response.body);
+    return response;
   }
 
-  Future _confirmOrder(String orderid) async {
-    try {
-      final response = await post(
-          Uri.parse(
-              'https://35.171.26.170/api/order_handle/confirmed/' + orderid),
-          headers: {'x-authtoken': getToken()},
-          body: {'orderid': orderid});
-
-      print(response.statusCode);
-      print(response.body);
-      return response.statusCode;
-    } catch (err) {}
+  Future<http.Response> _confirmOrder(String orderid) async {
+    SharedPreferences riderToken = await SharedPreferences.getInstance();
+    final url = 'https://35.171.26.170/api/order_handle/confirmed/' + orderid;
+    final response = await http.get(
+      Uri.parse('https://35.171.26.170/api/order_handle/confirmed/' + orderid),
+      headers: {
+        'x-authtoken': riderToken.getString('riderToken').toString(),
+        "Content-Type": "application/json"
+      },
+    );
+    print(url);
+    print(response.statusCode);
+    print(response.body);
+    return response;
   }
 
   _checkLoginRider() async {
@@ -69,185 +73,209 @@ class _OrderListState extends State<OrderList> {
     }
   }
 
-  getToken() async {
-    SharedPreferences riderToken = await SharedPreferences.getInstance();
-    String? token = riderToken.getString('riderToken');
-    return token;
-  }
+  // getToken() async {
+  //   SharedPreferences riderToken = await SharedPreferences.getInstance();
+  //   String? token = riderToken.getString('riderToken');
+  //   return token;
+  // }
 
   clearToken() async {
     SharedPreferences riderToken = await SharedPreferences.getInstance();
     riderToken.remove('riderToken');
   }
 
-  Widget _orderList() {
-    return ListView.builder(
-      scrollDirection: Axis.vertical,
-      shrinkWrap: true,
-      itemCount: listData.length,
-      itemBuilder: (BuildContext context, int index) {
-        final item = listData[index];
-        return Card(
-            elevation: 8.0,
-            margin: new EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.blue.shade200,
-                //color: Color.fromRGBO(64, 75, 96, .9),
-                //borderRadius: BorderRadius.all(Radius.circular(25)),
-              ),
-              child: ListTile(
-                  contentPadding:
-                      EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  leading: Container(
-                    padding: EdgeInsets.only(right: 12.0),
-                    decoration: new BoxDecoration(
-                        border: new Border(
-                            right: new BorderSide(
-                                width: 1.0, color: Colors.black))),
-                    child: Icon(Icons.delivery_dining, color: Colors.black),
-                  ),
-                  title: Text(item["title"],
-                      style: TextStyle(
-                          color: Colors.black, fontWeight: FontWeight.bold)),
-                  // subtitle: Text("Intermediate", style: TextStyle(color: Colors.white)),
-
-                  subtitle: Row(
-                    children: <Widget>[
-                      // Icon(Icons.linear_scale, color: Colors.blue.shade900),
-                      Text(item["title"][0],
-                          style: TextStyle(color: Colors.black))
-                    ],
-                  ),
-                  trailing: IconButton(
-                    icon: Icon(Icons.keyboard_arrow_right),
-                    onPressed: () async {
-                      var statusCode = await _confirmOrder(item['title']);
-                      if (statusCode == 201) {
-                        showDialog<String>(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                                    title:
-                                        const Text('Confirmed Successfully!!!'),
-                                    // content: const Text(''),
-                                    actions: <Widget>[
-                                      TextButton(
-                                        onPressed: () => Navigator.push(
-                                            context,
-                                            MaterialPageRoute(
-                                                builder: (context) =>
-                                                    OrderList(title: ''))),
-                                        child: const Text('Ok'),
-                                      ),
-                                      TextButton(
-                                          onPressed: () {
-                                            clearToken();
-                                            Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        WelcomePage(
-                                                            title: '')));
-                                          },
-                                          child: const Text('Go to Main Page'))
-                                    ]));
-                      } else if (statusCode == 400) {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Incorrect Order!!!'),
-                            // content: const Text('Incorrect Credentials'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            OrderList(title: ''))),
-                                child: const Text('Ok'),
-                              ),
-                            ],
-                          ),
-                        );
-                      } else {
-                        showDialog<String>(
-                          context: context,
-                          builder: (BuildContext context) => AlertDialog(
-                            title: const Text('Something Went Wrong!!!'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('Try Again'),
-                              ),
-                            ],
-                          ),
-                        );
-                      }
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => OrderList(title: '')));
-                    },
-                    color: Colors.black,
-                  )),
-            ));
-      },
-    );
-  }
-
-  Widget _orderConfirm() {
+  Widget _refresh() {
     return Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(vertical: 15),
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(5)),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Colors.grey.shade200,
-                offset: Offset(2, 4),
-                blurRadius: 5,
-                spreadRadius: 2)
-          ],
-          gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [Color(0xfffbb448), Color(0xfff7892b)])),
-      child: Text(
-        'Order Arrived',
-        style: TextStyle(fontSize: 20, color: Colors.white),
-      ),
-    );
+        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
+        child: InkWell(
+            onTap: () async {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrderList(title: ''),
+                ),
+              );
+            },
+            child: SubmitButton(buttontext: "Refresh")));
   }
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
     return DefaultTabController(
       length: 1,
       child: Scaffold(
-        appBar: Appbar(subtitle: "Orders"),
-        body: SafeArea(
-          child: Container(
-            height: height,
-            child: Stack(
-              children: <Widget>[
-                Positioned(
-                  top: -MediaQuery.of(context).size.height * .15,
-                  right: -MediaQuery.of(context).size.width * .4,
-                  child: BezierContainer(),
-                ),
-                Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Form(
-                    key: _formKey,
-                    child: _orderList(),
-                  ),
-                ),
-              ],
+        appBar: AppbarRider(
+          subtitle: "Orders",
+          previous: "regrider",
+        ),
+        // body: Safearea(formkey: _formKeyOrderList, body: _widget()),
+        // body: SafeArea(
+        //   child: Container(
+        //     height: height,
+        //     child: Stack(
+        //       children: <Widget>[
+        //         Positioned(
+        //           top: -MediaQuery.of(context).size.height * .15,
+        //           right: -MediaQuery.of(context).size.width * .4,
+        //           child: BezierContainer(),
+        //         ),
+        //         Container(
+        //           padding: EdgeInsets.symmetric(horizontal: 30),
+        //           child: SingleChildScrollView(
+        //             scrollDirection: Axis.vertical,
+        //             child: Form(
+        //               key: _formKeyOrderList,
+        //               child: Column(
+        //                 crossAxisAlignment: CrossAxisAlignment.center,
+        //                 mainAxisAlignment: MainAxisAlignment.center,
+        //                 children: <Widget>[
+        //                   SizedBox(height: 20),
+        //                   _refresh(),
+        //                   SizedBox(height: 20),
+        //                   _orderList()
+        //                 ],
+        //               ),
+        //             ),
+        //           ),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // )
+
+        body: Stack(children: <Widget>[
+          Positioned(
+            top: -MediaQuery.of(context).size.height * .15,
+            right: -MediaQuery.of(context).size.width * .4,
+            child: BezierContainer(),
+          ),
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 0),
+            child: Form(
+              key: _formKeyOrderList,
+              child: FutureBuilder(
+                future: _getOrderList(),
+                builder: (context, snapshot) {
+                  return ListView.builder(
+                    itemCount: listData.length,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        color: Colors.transparent,
+                        margin: EdgeInsets.symmetric(
+                            horizontal: 0.0, vertical: 0.0),
+                        child: Container(
+                          child: ListTile(
+                              contentPadding: EdgeInsets.symmetric(
+                                  horizontal: 20.0, vertical: 10.0),
+                              leading: Container(
+                                padding: EdgeInsets.only(right: 12.0),
+                                decoration: new BoxDecoration(
+                                    border: new Border(
+                                        right: new BorderSide(
+                                            width: 1.0, color: Colors.black))),
+                                child: Icon(Icons.delivery_dining,
+                                    color: Colors.black),
+                              ),
+                              title: Text(listData[index]["orderID"],
+                                  style: TextStyle(
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.bold)),
+                              subtitle: Text(
+                                listData[index]["mobNo"] +
+                                    "\n" +
+                                    listData[index]["address"],
+                                style: TextStyle(color: Colors.black),
+                              ),
+                              trailing: IconButton(
+                                icon: Icon(Icons.keyboard_arrow_right),
+                                onPressed: () async {
+                                  var response = await _confirmOrder(
+                                      listData[index]['orderID']);
+                                  if (response.statusCode == 200) {
+                                    showDialog<String>(
+                                        context: context,
+                                        builder: (BuildContext context) =>
+                                            AlertDialog(
+                                                title: const Text(
+                                                    'Confirmed Successfully!!!'),
+                                                content: Text(response.body),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () => Navigator.push(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                OrderList(
+                                                                    title:
+                                                                        ''))),
+                                                    child: const Text('Ok'),
+                                                  ),
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        Navigator.push(
+                                                            context,
+                                                            MaterialPageRoute(
+                                                                builder: (context) =>
+                                                                    WelcomePage(
+                                                                        title:
+                                                                            '')));
+                                                      },
+                                                      child: const Text(
+                                                          'Go to Main Page'))
+                                                ]));
+                                  } else if (response.statusCode == 400) {
+                                    showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text('Incorrect Order!!!'),
+                                        // content: const Text('Incorrect Credentials'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () => Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        OrderList(title: ''))),
+                                            child: const Text('Ok'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  } else {
+                                    showDialog<String>(
+                                      context: context,
+                                      builder: (BuildContext context) =>
+                                          AlertDialog(
+                                        title: const Text(
+                                            'Something Went Wrong!!!'),
+                                        actions: <Widget>[
+                                          TextButton(
+                                            onPressed: () =>
+                                                Navigator.pop(context),
+                                            child: const Text('Try Again'),
+                                          ),
+                                        ],
+                                      ),
+                                    );
+                                  }
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              OrderList(title: '')));
+                                },
+                                color: Colors.black,
+                              )),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
             ),
           ),
-        ),
+        ]),
       ),
     );
   }

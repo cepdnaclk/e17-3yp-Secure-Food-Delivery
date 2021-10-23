@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:http/http.dart';
+import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 import 'dart:async';
@@ -28,28 +28,41 @@ class _LoginPageState extends State<LoginPageUser> {
   TextEditingController contact = TextEditingController();
   TextEditingController orderid = TextEditingController();
 
-  Future postData(String mobno, String orderid) async {
+  @override
+  void initState() {
+    super.initState();
+    _initNumber();
+  }
+
+  _initNumber() async {
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    if (pref.getString("mobno") != null) {
+      contact.text = pref.getString("mobno")!;
+    }
+  }
+
+  Future<http.Response> postData(String mobno, String orderid) async {
     var token;
     SharedPreferences userToken = await SharedPreferences.getInstance();
-    try {
-      final response = await post(
-        // Uri.parse('https://35.171.26.170/api/auth/customer'),
-        Uri.parse('https://jsonplaceholder.typicode.com/posts'),
-        body: {
-          'mobno': mobno,
-          'orderid': orderid,
-        },
-      );
-      if (response.statusCode == 201) {
-        token = jsonDecode(response.body);
+    userToken.setString("mobno", contact.text);
 
-        userToken.setString("userToken", token['mobno']);
-      }
-      print(response.statusCode);
-      print(response.body);
-      // return response.statusCode;
-      return 200;
-    } catch (err) {}
+    Map<String, String> data = {"mobno": mobno, "orderid": orderid};
+    final body = jsonEncode(data);
+    final response = await http.post(
+      Uri.parse("https://35.171.26.170/api/auth/customer"),
+      headers: {"Content-Type": "application/json", "connection": "keep-alive"},
+      body: body,
+    );
+    if (response.statusCode == 200) {
+      token = response.body;
+      print(token);
+      setState(() {
+        // _isLoading = false;
+        userToken.setString("userToken", token);
+      });
+    }
+    print(response.statusCode);
+    return response;
   }
 
   Widget _submitButton() {
@@ -60,8 +73,9 @@ class _LoginPageState extends State<LoginPageUser> {
             print(contact.text);
             print(orderid.text);
 
-            var statusCode = await postData(contact.text, orderid.text);
-            if (statusCode == 200) {
+            final response = await postData(contact.text, orderid.text);
+            print(response.body);
+            if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
@@ -82,12 +96,13 @@ class _LoginPageState extends State<LoginPageUser> {
                   ],
                 ),
               );
-            } else if (statusCode == 400 || statusCode == 401) {
+            } else if (response.statusCode == 400 ||
+                response.statusCode == 401) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
                   title: const Text('Login Error!!!'),
-                  content: const Text('Incorrect Credentials'),
+                  content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
@@ -105,7 +120,7 @@ class _LoginPageState extends State<LoginPageUser> {
                   ],
                 ),
               );
-            } else if (statusCode == 404) {
+            } else if (response.statusCode == 404) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
@@ -176,7 +191,7 @@ class _LoginPageState extends State<LoginPageUser> {
         _submitButton(),
         BottomLink(
             navigate: "SignUpPageUser",
-            description: "Don\'t have an account ?",
+            description: "Want to become Pro User? ",
             link: "Register")
       ],
     );
@@ -187,7 +202,10 @@ class _LoginPageState extends State<LoginPageUser> {
     return DefaultTabController(
         length: 1,
         child: Scaffold(
-            appBar: Appbar(subtitle: "Customer Login"),
+            appBar: Appbar(
+              subtitle: "Customer Login",
+              previous: "welcome",
+            ),
             body: Safearea(formkey: _formKeyLoginUser, body: _widget())));
   }
 }

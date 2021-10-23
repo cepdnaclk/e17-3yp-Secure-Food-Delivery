@@ -2,6 +2,8 @@
 	require_once("connection.php");
     session_start();
 
+    $query_err1 = $query_err2 = "";
+
 	if (isset($_POST['sign-up-customer'])) {
 		$TelNo =mysqli_real_escape_string($connection,$_POST['number']);
 		$CName =mysqli_real_escape_string($connection,$_POST['name']);
@@ -13,19 +15,22 @@
 		if($excecute){
 			header("Location:index.html");
 		}
+        else{$query_err1 = "*Database query failed";}
 	}
 
 	if (isset($_POST['sign-up-partner'])) {
 		$Email =mysqli_real_escape_string($connection,$_POST['email']);
 		$RestName =mysqli_real_escape_string($connection,$_POST['name']);
+        $Code =mysqli_real_escape_string($connection,$_POST['code']);
 		$PPassword =mysqli_real_escape_string($connection,$_POST['password']);
 		
-		$query = "insert into partner(Email, RestName, PPassword) values('$Email', '$RestName', '$PPassword')";
+		$query = "insert into partner(Email, RestName, id, PPassword) values('$Email', '$RestName', '$Code', '$PPassword')";
 		$excecute = mysqli_query($connection,$query);
 
 		if($excecute){
 			header("Location:index.html");
 		}
+        else{$query_err2 = "*Database query failed";}
 	}
 	
  ?>
@@ -36,7 +41,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <title>Sign-Up - OrderMe</title>
+    <title>Sign-Up | OrderMe</title>
     
     <!-- Styles -->
     <link rel="preconnect" href="https://fonts.gstatic.com">
@@ -93,22 +98,27 @@
                                 <!-- Sign Up Form -->
                                 <form action="signUp.php" method="post" id="signUpFormCustomer">
                                     <p class="p-large">Register as a customer to place orders.</p>
+                                    <?php echo "<div style=\"color: red;\"><b>". $query_err1 . "</b></div>"; ?>
                                     <div class="form-group">
-                                        <input type="text" class="form-control-input" id="name" name="name" required>
+                                        <hr style="height:0px; visibility:hidden;" />
+                                        <input type="text" class="form-control-input" id="name" name="name" maxlength="20" required>
                                         <label class="label-control" for="name">Name</label>
                                     </div>
                                     <div class="form-group">
+                                        <hr style="height:0px; visibility:hidden;" />
                                         <input type="tel" class="form-control-input" id="number" name="number" maxlength="10" required>
                                         <label class="label-control" for="number">Mobile Number</label>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control-input" id="password" name="password" required>
+                                        <hr style="height:0px; visibility:hidden;" />
+                                        <input type="password" class="form-control-input" id="password" name="password" maxlength="20" required>
                                         <label class="label-control" for="password">Password</label>
                                     </div>
                                     <div class="form-group">
                                         <button type="submit" class="form-control-submit-button" name="sign-up-customer">Sign Up</button>
                                     </div>
                                 </form>
+                                <p class="mb-4">Do you have an account? sign-in <a class="blue" href="login.php">here</a></p>
                                 <!-- end of sign up form -->
                             </div> <!-- end of text-box -->
                         </div>
@@ -117,16 +127,25 @@
                                 <!-- Sign Up Form -->
                                 <form action="signUp.php" method="post" id="signUpFormPartner">
                                     <p class="p-large">Register as a partner to get register your restaurant.</p>
+                                    <?php echo "<div style=\"color: red;\"><b>". $query_err2 . "</b></div>"; ?>
                                     <div class="form-group">
-                                        <input type="text" class="form-control-input" id="name" name="name" required>
+                                        <hr style="height:0px; visibility:hidden;" />
+                                        <input type="text" class="form-control-input" id="name" name="name" maxlength="50" required>
                                         <label class="label-control" for="name">Restaurant Name</label>
                                     </div>
                                     <div class="form-group">
-                                        <input type="email" class="form-control-input" id="email" name="email" required>
+                                        <hr style="height:0px; visibility:hidden;" />
+                                        <input type="email" class="form-control-input" id="email" name="email" maxlength="30" required>
                                         <label class="label-control" for="email">E-Mail</label>
                                     </div>
                                     <div class="form-group">
-                                        <input type="password" class="form-control-input" id="password" name="password" required>
+                                        <hr style="height:0px; visibility:hidden;" />
+                                        <input type="text" class="form-control-input" id="code" name="code" maxlength="4" required>
+                                        <label class="label-control" for="code">Purchase Code</label>
+                                    </div>
+                                    <div class="form-group">
+                                        <hr style="height:0px; visibility:hidden;" />
+                                        <input type="password" class="form-control-input" id="password" name="password" maxlength="20" required>
                                         <label class="label-control" for="password">Password</label>
                                     </div>
                                     <div class="form-group">
@@ -134,7 +153,9 @@
                                     </div>
                                 </form>
                                 <!-- end of sign up form -->
-                            </div> <!-- end of text-box --></div>
+                                <p class="mb-4">Do you have an account? sign-in <a class="blue" href="login.php">here</a></p>
+                            </div> <!-- end of text-box -->
+                        </div>
                     </div>
                 </div> <!-- end of col -->
             </div> <!-- end of row -->
