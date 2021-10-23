@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'WelcomePage.dart';
-import 'Widget/appbarrider.dart';
-import 'Widget/submitbutton.dart';
+import 'dart:convert';
 import 'loginPageRider.dart';
+import 'Widget/appbarrider.dart';
 import 'Widget/bezierContainer.dart';
 
 class OrderList extends StatefulWidget {
@@ -37,15 +35,10 @@ class _OrderListState extends State<OrderList> {
       Uri.parse('https://35.171.26.170/api/order_handle/list'),
       headers: {'x-authtoken': riderToken.getString('riderToken').toString()},
     );
-    print(riderToken.getString('riderToken').toString());
     if (response.statusCode == 200) {
       orderList = jsonDecode(response.body) as List;
       listData = orderList;
-      print(listData);
-      print(riderToken.getString('riderToken').toString());
     }
-    print(response.statusCode);
-    print(response.body);
     return response;
   }
 
@@ -59,9 +52,6 @@ class _OrderListState extends State<OrderList> {
         "Content-Type": "application/json"
       },
     );
-    print(url);
-    print(response.statusCode);
-    print(response.body);
     return response;
   }
 
@@ -73,30 +63,9 @@ class _OrderListState extends State<OrderList> {
     }
   }
 
-  // getToken() async {
-  //   SharedPreferences riderToken = await SharedPreferences.getInstance();
-  //   String? token = riderToken.getString('riderToken');
-  //   return token;
-  // }
-
   clearToken() async {
     SharedPreferences riderToken = await SharedPreferences.getInstance();
     riderToken.remove('riderToken');
-  }
-
-  Widget _refresh() {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-        child: InkWell(
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderList(title: ''),
-                ),
-              );
-            },
-            child: SubmitButton(buttontext: "Refresh")));
   }
 
   @override
@@ -108,63 +77,29 @@ class _OrderListState extends State<OrderList> {
           subtitle: "Orders",
           previous: "regrider",
         ),
-        // body: Safearea(formkey: _formKeyOrderList, body: _widget()),
-        // body: SafeArea(
-        //   child: Container(
-        //     height: height,
-        //     child: Stack(
-        //       children: <Widget>[
-        //         Positioned(
-        //           top: -MediaQuery.of(context).size.height * .15,
-        //           right: -MediaQuery.of(context).size.width * .4,
-        //           child: BezierContainer(),
-        //         ),
-        //         Container(
-        //           padding: EdgeInsets.symmetric(horizontal: 30),
-        //           child: SingleChildScrollView(
-        //             scrollDirection: Axis.vertical,
-        //             child: Form(
-        //               key: _formKeyOrderList,
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.center,
-        //                 mainAxisAlignment: MainAxisAlignment.center,
-        //                 children: <Widget>[
-        //                   SizedBox(height: 20),
-        //                   _refresh(),
-        //                   SizedBox(height: 20),
-        //                   _orderList()
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // )
-
-        body: Stack(children: <Widget>[
-          Positioned(
-            top: -MediaQuery.of(context).size.height * .15,
-            right: -MediaQuery.of(context).size.width * .4,
-            child: BezierContainer(),
-          ),
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 0),
-            child: Form(
-              key: _formKeyOrderList,
-              child: FutureBuilder(
-                future: _getOrderList(),
-                builder: (context, snapshot) {
-                  return ListView.builder(
-                    itemCount: listData.length,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        color: Colors.transparent,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: 0.0, vertical: 0.0),
-                        child: Container(
-                          child: ListTile(
+        body: Stack(
+          children: <Widget>[
+            Positioned(
+              top: -MediaQuery.of(context).size.height * .15,
+              right: -MediaQuery.of(context).size.width * .4,
+              child: BezierContainer(),
+            ),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 0),
+              child: Form(
+                key: _formKeyOrderList,
+                child: FutureBuilder(
+                  future: _getOrderList(),
+                  builder: (context, snapshot) {
+                    return ListView.builder(
+                      itemCount: listData.length,
+                      itemBuilder: (context, index) {
+                        return Card(
+                          color: Colors.transparent,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 0.0, vertical: 0.0),
+                          child: Container(
+                            child: ListTile(
                               contentPadding: EdgeInsets.symmetric(
                                   horizontal: 20.0, vertical: 10.0),
                               leading: Container(
@@ -188,17 +123,58 @@ class _OrderListState extends State<OrderList> {
                               ),
                               trailing: IconButton(
                                 icon: Icon(Icons.keyboard_arrow_right),
-                                onPressed: () async {
-                                  var response = await _confirmOrder(
-                                      listData[index]['orderID']);
-                                  if (response.statusCode == 200) {
-                                    showDialog<String>(
-                                        context: context,
-                                        builder: (BuildContext context) =>
-                                            AlertDialog(
+                                onPressed: () => showDialog<String>(
+                                  context: context,
+                                  builder: (BuildContext context) =>
+                                      AlertDialog(
+                                    title: const Text(
+                                        'Do You Want to Confirm this Order'),
+                                    content: Text(listData[index]["orderID"]),
+                                    actions: <Widget>[
+                                      TextButton(
+                                        onPressed: () async {
+                                          var response = await _confirmOrder(
+                                              listData[index]['orderID']);
+                                          if (response.statusCode == 200) {
+                                            showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
                                                 title: const Text(
-                                                    'Confirmed Successfully!!!'),
+                                                    'Confirmed Successfully'),
                                                 content: Text(response.body),
+                                                actions: <Widget>[
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            OrderList(
+                                                                title: ''),
+                                                      ),
+                                                    ),
+                                                    child: const Text(
+                                                      'Ok',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 20.0),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          } else if (response.statusCode ==
+                                              400) {
+                                            showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const Text(
+                                                    'Incorrect Order'),
+                                                content: const Text(
+                                                    'Incorrect Credentials'),
                                                 actions: <Widget>[
                                                   TextButton(
                                                     onPressed: () => Navigator.push(
@@ -208,74 +184,73 @@ class _OrderListState extends State<OrderList> {
                                                                 OrderList(
                                                                     title:
                                                                         ''))),
-                                                    child: const Text('Ok'),
+                                                    child: const Text(
+                                                      'Ok',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 20.0),
+                                                    ),
                                                   ),
+                                                ],
+                                              ),
+                                            );
+                                          } else {
+                                            showDialog<String>(
+                                              context: context,
+                                              builder: (BuildContext context) =>
+                                                  AlertDialog(
+                                                title: const Text(
+                                                    'Something Went Wrong'),
+                                                actions: <Widget>[
                                                   TextButton(
-                                                      onPressed: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    WelcomePage(
-                                                                        title:
-                                                                            '')));
-                                                      },
-                                                      child: const Text(
-                                                          'Go to Main Page'))
-                                                ]));
-                                  } else if (response.statusCode == 400) {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        title: const Text('Incorrect Order!!!'),
-                                        // content: const Text('Incorrect Credentials'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () => Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        OrderList(title: ''))),
-                                            child: const Text('Ok'),
-                                          ),
-                                        ],
+                                                    onPressed: () =>
+                                                        Navigator.pop(context),
+                                                    child: const Text(
+                                                      'Try Again',
+                                                      style: TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontSize: 20.0),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            );
+                                          }
+                                        },
+                                        child: const Text(
+                                          'Yes',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 20.0),
+                                        ),
                                       ),
-                                    );
-                                  } else {
-                                    showDialog<String>(
-                                      context: context,
-                                      builder: (BuildContext context) =>
-                                          AlertDialog(
-                                        title: const Text(
-                                            'Something Went Wrong!!!'),
-                                        actions: <Widget>[
-                                          TextButton(
-                                            onPressed: () =>
-                                                Navigator.pop(context),
-                                            child: const Text('Try Again'),
-                                          ),
-                                        ],
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text(
+                                          'No',
+                                          style: TextStyle(
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: 20.0,
+                                              color: Colors.red),
+                                        ),
                                       ),
-                                    );
-                                  }
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              OrderList(title: '')));
-                                },
-                                color: Colors.black,
-                              )),
-                        ),
-                      );
-                    },
-                  );
-                },
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
-          ),
-        ]),
+          ],
+        ),
       ),
     );
   }

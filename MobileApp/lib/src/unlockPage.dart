@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dart:convert';
 
 import 'WelcomePage.dart';
 import 'loginPageUser.dart';
@@ -56,8 +56,6 @@ class _UnlockPageState extends State<UnlockPage> {
       },
       body: body,
     );
-    print(response.statusCode);
-    print(response.body.toString());
     return response;
   }
 
@@ -84,7 +82,13 @@ class _UnlockPageState extends State<UnlockPage> {
                           builder: (context) => WelcomePage(title: ''),
                         ),
                       ),
-                      child: const Text('Ok'),
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -93,21 +97,18 @@ class _UnlockPageState extends State<UnlockPage> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Error!!!'),
+                  title: const Text('Error'),
                   content: const Text('Access Denied'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -116,21 +117,18 @@ class _UnlockPageState extends State<UnlockPage> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Error!!!'),
+                  title: const Text('Login Error'),
                   content: const Text('Rider on the way.\nNeeds to confirm.'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -139,11 +137,18 @@ class _UnlockPageState extends State<UnlockPage> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Something Went Wrong!!!'),
+                  title: const Text('Something Went Wrong'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Try Again'),
+                      child: const Text(
+                        'Try Again',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ],
                 ),

@@ -38,12 +38,6 @@ class _LoginPageState extends State<LoginPageRider> {
     if (riderToken.getString("mobnoRider") != null) {
       contact.text = riderToken.getString("mobnoRider")!;
     }
-    if (riderToken.getString("riderToken") != null) {
-      if (riderToken.getBool('login') == true) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => OrderList(title: '')));
-      }
-    }
   }
 
   Future<http.Response> postData(String mobno, String password) async {
@@ -59,12 +53,10 @@ class _LoginPageState extends State<LoginPageRider> {
     );
     if (response.statusCode == 200) {
       token = response.body;
-      print(token);
       setState(() {
         riderToken.setString("riderToken", token);
       });
     }
-    print(response.statusCode);
     return response;
   }
 
@@ -73,18 +65,13 @@ class _LoginPageState extends State<LoginPageRider> {
         onTap: () async {
           if (_formKeyLoginRider.currentState!.validate()) {
             _formKeyLoginRider.currentState!.save();
-            print(contact.text);
-            print(password.text);
-            // setState(() {
-            //   _isLoading = true;
-            // });
             final http.Response response =
                 await postData(contact.text, password.text);
             if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Successfully!!!'),
+                  title: const Text('Login Successfully'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.push(
@@ -95,7 +82,13 @@ class _LoginPageState extends State<LoginPageRider> {
                           ),
                         ),
                       ),
-                      child: const Text('Ok'),
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -104,21 +97,18 @@ class _LoginPageState extends State<LoginPageRider> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Error!!!'),
+                  title: const Text('Login Error'),
                   content: const Text('Incorrect Credentials'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -127,11 +117,18 @@ class _LoginPageState extends State<LoginPageRider> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Something Went Wrong!!!'),
+                  title: const Text('Something Went Wrong'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Try Again'),
+                      child: const Text(
+                        'Try Again',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -165,7 +162,8 @@ class _LoginPageState extends State<LoginPageRider> {
           hint: "Enter Password Here",
           icon: Icon(Icons.security_sharp),
           filter: FilteringTextInputFormatter.allow(
-              RegExp(r"[A-Za-z0-9,.:;!<>?=@#$%&*()_+/-[]")),
+            RegExp(r"[A-Za-z0-9,.:;!<>?=@#$%&*()_+/-[]"),
+          ),
           passwordtrue: true,
         ),
         SizedBox(height: height * 0.31),
