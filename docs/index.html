@@ -91,6 +91,9 @@
                                         <a class="page-scroll" href="#design">Design</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="page-scroll" href="#security">Security</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <ul class="navbar-nav ms-auto">
                                             <li class="nav-item dropdown">
                                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
@@ -635,7 +638,7 @@
                             </div>
                             <div class="single-testimonial">
                                 <div class="testimonial-review d-flex align-items-center justify-content-between">
-                                    <p class="text">For the implementation of the mobile aaplication flutter has chosen as it supports both android and IOS applications with single code base.</p>
+                                    <p class="text">For the implementation of the mobile aplication, Flutter has chosen as it supports both android and IOS applications with single code base.</p>
                                 </div>
                             </div>
                         </div> <!-- single blog -->
@@ -650,7 +653,7 @@
                             </div>
                             <div class="single-testimonial">
                                 <div class="testimonial-review d-flex align-items-center justify-content-between">
-                                    <p class="text">For the backend development NodeJS was selected.</p>
+                                    <p class="text">To built the API, Node.js javascript runtime enviroment is used.<br>Single treaded non-blocking operations, make the speed of the application much higher.</p>
                                 </div>
                             </div>
                         </div> <!-- single blog -->
@@ -665,7 +668,7 @@
                             </div>
                             <div class="single-testimonial">
                                 <div class="testimonial-review d-flex align-items-center justify-content-between">
-                                    <p class="text">To manage a relational database MySQL is the best solution.</p>
+                                    <p class="text">As the database, the API uses a relational database.<br>MySQL is used to build the relational database for the API.</p>
                                 </div>
                             </div>
                         </div> <!-- single blog -->
@@ -673,14 +676,14 @@
                     <div class="col-lg-3 col-md-7">
                         <div class="single-blog mt-30 wow fadeIn" data-wow-duration="1s" data-wow-delay="1s">
                             <div class="author-content media-body">
-                                <h6 class="holder-name"><center>AWS</center></h6><hr>
+                                <h6 class="holder-name"><center>AWS Services</center></h6><hr>
                             </div>
                             <div class="blog-image">
                                 <img src="assets/images/technologies/aws.jpg" alt="blog"><hr>
                             </div>
                             <div class="single-testimonial">
                                 <div class="testimonial-review d-flex align-items-center justify-content-between">
-                                    <p class="text">For cloud server we are using AWS.</p>
+                                    <p class="text">AWS EC2 Service is used to host the API.<br>For the MQTT connections, the AWS IoT Core is being plan to use.</p>
                                 </div>
                             </div>
                         </div> <!-- single blog -->
@@ -691,7 +694,88 @@
         <!--====== SOFTWARE PART ENDS ======-->
     </section>
 
-    <section id="testing"></section>
+    <section id="security" class="blog-area pt-25">
+        <div class="container">
+            <div class="col-lg-12">
+                <div class="mt-10 wow fadeInLeftBig" data-wow-duration="1s" data-wow-delay="0.5s">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div class="section-title pb-10">
+                                <div class="line"></div>
+                                <h3 class="title">Security</h3>
+                            </div> <!-- section title -->
+                        </div>
+                    </div> <!-- row -->
+                    <!-- <div class="section-title">
+                        <h3 class="title"><span>Control and Data flow</span></h3>
+                    </div> section title -->
+                    <div style="text-align:justify; text-justify:auto;">
+                        <p class="text">
+                            <span>
+                                Security is the most important thing in the IT world right now.
+                                In our solution, we have deeply considered the security point of view of our system.<br>
+                                We have developed our system with the help of the following techniques to enhance the application security in our solution.
+                            </span>
+                            <ul>
+                                <li><br>JSON Web Tokens (JWT)</li>
+                                    <p class="text" style="margin-left: 40px">
+                                        For authentication purposes, our API uses the JSON Web Token to ensure integrity.<br>
+                                        In the successful event of login, the user must receive a JWT, which is signed by the server.<br>
+                                        Whenever the client wants to communicate with API (after the login stage), it has to pass that returned token with the
+                                        request.<br>
+                                        If somehow the token is modified, API would deny access to the data.
+                                    </p>
+                                <li><br>Input Validations</li>
+                                    <p class="text" style="margin-left: 40px">
+                                        User Inputs are the most common way to commit a malicious attack.<br>
+                                        To prevent such scenarios, we validate the user input from both the front-end application and the back-end API.<br>
+                                        If inputs are not in the correct order, in the front-end, it denies the inputs. And from the back-end, it denies the request.
+                                    </p>
+                                <li><br>Encrypt Sensitive Data</li>
+                                    <p class="text" style="margin-left: 40px">
+                                        Although we are using a relational database to work with data, we do not directly store sensitive data on the database.<br>
+                                        For that, we encrypt the sensitive data on the API with the help of well-known powerful libraries and then store those in the database.
+                                    </p>
+                                <li><br>SSL/TLS Communication</li>
+                                    <p class="text" style="margin-left: 40px">
+                                        To ensure secure communication between the mobile application, and the API, we used the HTTPS protocol to securely transmit the data.<br>
+                                        With that, we can guarantee the message's integrity as well as the confidentiality of the data.<br>
+                                        In our API itself is secured with AWS EC2 security features. Hence the security of the system is more in an advanced manner.
+                                    </p>
+                                <li><br>MQTT Broker Authentication</li>
+                                    <p class="text" style="margin-left: 40px">
+                                        Hardware to hardware communication (API and the Microcontroller), we have used the MQTT as the messaging protocol.<br>
+                                        For that, we have currently used AWS IoT Core as an MQTT message broker, which is a secured private message broker that requires certificate-based authentication for the MQTT clients.<br>
+                                    </p>
+                            </ul>
+                        </p>
+                    </div>
+                </div> <!-- about content -->
+            </div>
+        </div>
+    </section>
+
+    <section id="testing" class="services-area pt-75">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="section-title text-center pb-10">
+                        <div class="line m-auto"></div>
+                        <h3 class="title">Testing Plan</h3>
+                    </div> <!-- section title -->
+                </div>
+            </div> <!-- row -->
+            <div class="row justify-content-center">
+                <div class="col-lg-12 col-md-12">
+                    <div class="single-blog mt-30 wow fadeInUpBig" data-wow-duration="1s" data-wow-delay="0.3s">
+                        <div class="blog-image">
+                            <img src="assets/images/more/testing.png" alt="blog3">
+                        </div>
+                    </div> <!-- single blog -->
+                </div>
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </section>
 
     <!--====== BUDGET PART START ======-->
     <section id="budget" class="services-area pt-75">
