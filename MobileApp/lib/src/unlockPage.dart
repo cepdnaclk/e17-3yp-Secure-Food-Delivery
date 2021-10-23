@@ -1,9 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'dart:convert';
 
 import 'WelcomePage.dart';
 import 'loginPageUser.dart';
@@ -56,8 +56,6 @@ class _UnlockPageState extends State<UnlockPage> {
       },
       body: body,
     );
-    print(response.statusCode);
-    print(response.body.toString());
     return response;
   }
 
@@ -84,7 +82,13 @@ class _UnlockPageState extends State<UnlockPage> {
                           builder: (context) => WelcomePage(title: ''),
                         ),
                       ),
-                      child: const Text('Ok'),
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -98,7 +102,13 @@ class _UnlockPageState extends State<UnlockPage> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -112,7 +122,13 @@ class _UnlockPageState extends State<UnlockPage> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -125,7 +141,14 @@ class _UnlockPageState extends State<UnlockPage> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Try Again'),
+                      child: const Text(
+                        'Try Again',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ],
                 ),
