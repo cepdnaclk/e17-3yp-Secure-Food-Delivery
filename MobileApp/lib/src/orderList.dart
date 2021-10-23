@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'WelcomePage.dart';
-import 'Widget/appbarrider.dart';
-import 'Widget/submitbutton.dart';
+import 'dart:convert';
 import 'loginPageRider.dart';
+import 'Widget/appbarrider.dart';
 import 'Widget/bezierContainer.dart';
 
 class OrderList extends StatefulWidget {
@@ -37,15 +35,10 @@ class _OrderListState extends State<OrderList> {
       Uri.parse('https://35.171.26.170/api/order_handle/list'),
       headers: {'x-authtoken': riderToken.getString('riderToken').toString()},
     );
-    print(riderToken.getString('riderToken').toString());
     if (response.statusCode == 200) {
       orderList = jsonDecode(response.body) as List;
       listData = orderList;
-      print(listData);
-      print(riderToken.getString('riderToken').toString());
     }
-    print(response.statusCode);
-    print(response.body);
     return response;
   }
 
@@ -59,9 +52,6 @@ class _OrderListState extends State<OrderList> {
         "Content-Type": "application/json"
       },
     );
-    print(url);
-    print(response.statusCode);
-    print(response.body);
     return response;
   }
 
@@ -73,30 +63,9 @@ class _OrderListState extends State<OrderList> {
     }
   }
 
-  // getToken() async {
-  //   SharedPreferences riderToken = await SharedPreferences.getInstance();
-  //   String? token = riderToken.getString('riderToken');
-  //   return token;
-  // }
-
   clearToken() async {
     SharedPreferences riderToken = await SharedPreferences.getInstance();
     riderToken.remove('riderToken');
-  }
-
-  Widget _refresh() {
-    return Container(
-        padding: EdgeInsets.symmetric(horizontal: 5, vertical: 20),
-        child: InkWell(
-            onTap: () async {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderList(title: ''),
-                ),
-              );
-            },
-            child: SubmitButton(buttontext: "Refresh")));
   }
 
   @override
@@ -108,41 +77,6 @@ class _OrderListState extends State<OrderList> {
           subtitle: "Orders",
           previous: "regrider",
         ),
-        // body: Safearea(formkey: _formKeyOrderList, body: _widget()),
-        // body: SafeArea(
-        //   child: Container(
-        //     height: height,
-        //     child: Stack(
-        //       children: <Widget>[
-        //         Positioned(
-        //           top: -MediaQuery.of(context).size.height * .15,
-        //           right: -MediaQuery.of(context).size.width * .4,
-        //           child: BezierContainer(),
-        //         ),
-        //         Container(
-        //           padding: EdgeInsets.symmetric(horizontal: 30),
-        //           child: SingleChildScrollView(
-        //             scrollDirection: Axis.vertical,
-        //             child: Form(
-        //               key: _formKeyOrderList,
-        //               child: Column(
-        //                 crossAxisAlignment: CrossAxisAlignment.center,
-        //                 mainAxisAlignment: MainAxisAlignment.center,
-        //                 children: <Widget>[
-        //                   SizedBox(height: 20),
-        //                   _refresh(),
-        //                   SizedBox(height: 20),
-        //                   _orderList()
-        //                 ],
-        //               ),
-        //             ),
-        //           ),
-        //         ),
-        //       ],
-        //     ),
-        //   ),
-        // )
-
         body: Stack(
           children: <Widget>[
             Positioned(
