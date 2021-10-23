@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 
 import 'WelcomePage.dart';
@@ -41,9 +42,6 @@ class _SignUpPageState extends State<SignUpPageUser> {
       headers: {"Content-Type": "application/json"},
       body: body,
     );
-
-    print(response.body);
-    print(response.statusCode);
     return response;
   }
 
@@ -52,17 +50,13 @@ class _SignUpPageState extends State<SignUpPageUser> {
         onTap: () async {
           if (_formKeySignupUser.currentState!.validate()) {
             _formKeySignupUser.currentState!.save();
-            print(name.text);
-            print(contact.text);
-            print(email.text);
-            print(address.text);
             final http.Response response = await postData(
                 name.text, contact.text, address.text, email.text);
             if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Registered Successfully!!!'),
+                  title: const Text('Registered Successfully'),
                   content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
@@ -74,7 +68,13 @@ class _SignUpPageState extends State<SignUpPageUser> {
                           ),
                         ),
                       ),
-                      child: const Text('Ok'),
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -88,16 +88,13 @@ class _SignUpPageState extends State<SignUpPageUser> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -111,16 +108,13 @@ class _SignUpPageState extends State<SignUpPageUser> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -129,11 +123,18 @@ class _SignUpPageState extends State<SignUpPageUser> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Something Went Wrong!!!'),
+                  title: const Text('Something Went Wrong'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Try Again'),
+                      child: const Text(
+                        'Try Again',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ],
                 ),
