@@ -93,21 +93,12 @@ class _UnlockPageState extends State<UnlockPage> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Error!!!'),
+                  title: const Text('Error'),
                   content: const Text('Access Denied'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
                     ),
                   ],
                 ),
@@ -116,21 +107,12 @@ class _UnlockPageState extends State<UnlockPage> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Error!!!'),
+                  title: const Text('Login Error'),
                   content: const Text('Rider on the way.\nNeeds to confirm.'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
                     ),
                   ],
                 ),
@@ -139,7 +121,7 @@ class _UnlockPageState extends State<UnlockPage> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Something Went Wrong!!!'),
+                  title: const Text('Something Went Wrong'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),

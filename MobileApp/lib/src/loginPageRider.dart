@@ -38,12 +38,6 @@ class _LoginPageState extends State<LoginPageRider> {
     if (riderToken.getString("mobnoRider") != null) {
       contact.text = riderToken.getString("mobnoRider")!;
     }
-    if (riderToken.getString("riderToken") != null) {
-      if (riderToken.getBool('login') == true) {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => OrderList(title: '')));
-      }
-    }
   }
 
   Future<http.Response> postData(String mobno, String password) async {

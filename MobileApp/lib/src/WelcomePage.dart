@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import 'loginPageUser.dart';
 import 'loginPageRider.dart';
+import 'orderList.dart';
 
 class WelcomePage extends StatefulWidget {
   WelcomePage({Key? key, required this.title}) : super(key: key);
@@ -18,13 +19,18 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
-    clearToken();
+    _checkLoginRider();
   }
 
-  clearToken() async {
+  _checkLoginRider() async {
     SharedPreferences Token = await SharedPreferences.getInstance();
-    Token.remove('riderToken');
     Token.remove('userToken');
+    if (Token.getString("riderToken") != null) {
+      if (Token.getBool('login') == true) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OrderList(title: '')));
+      }
+    }
   }
 
   Widget _title() {
