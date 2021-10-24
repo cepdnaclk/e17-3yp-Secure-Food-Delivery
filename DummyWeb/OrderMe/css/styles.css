@@ -494,6 +494,10 @@ input[type='checkbox'] {
 	margin-top: 0.75rem;
 	margin-bottom: 0.5rem;
 }
+.navbar .navbar-nav1 {
+	margin-top: 0.75rem;
+	margin-bottom: 0.5rem;
+}
 
 .navbar .nav-item .nav-link {
 	padding-top: 0.625rem;
@@ -829,6 +833,10 @@ a:hover.back-to-top {
 /*     Extra Pages     */
 /***********************/
 .ex-header {
+	padding-top: 4.5rem;
+	padding-bottom: 1rem;
+}
+.ex-header1 {
 	padding-top: 4.5rem;
 	padding-bottom: 1rem;
 }

@@ -24,7 +24,7 @@ router.post('/rider', async (req, res) => {
             bcrypt.compare(req.body.password, result[0].rpassword).then((result) => {
                 if (!result) return res.status(400).send("invalid mobile number or password");
                 else {
-                    const rtoken = jwt.sign({ mobno: req.body.mobno, role: "rider" }, config.get('jwtPrivateKey'));
+                    const rtoken = jwt.sign({ mobno: req.body.mobno, deviceid: result[0].deviceID, role: "rider" }, config.get('jwtPrivateKey'));
                     return res.send(rtoken);
                 }
             });
@@ -41,9 +41,9 @@ router.post('/customer', async (req, res) => {
     let { error } = schema.validate(req.body);
     if (error) return res.status(400).send("incorrect credentials");
 
-    let sql = `SELECT mobNo, state, deviceID FROM order_handle WHERE order_handle.orderID = "${req.body.orderid}"`;
+    let sql = `SELECT mobNo, state, deviceID FROM order_handle WHERE order_handle.orderID = "${req.body.orderid}" AND order_handle.mobNo = "${req.body.mobno}"`;
     ConnectDB.query(sql, (err, result) => {
-        if (err) return res.status(401).send('error occured');
+        if (!result.length | err) return res.status(401).send('error occured');
         else {
             if (result[0].state != 'cancelled' & result[0].state != 'done') {
                 const ctoken = jwt.sign({ mobno: req.body.mobno, deviceid: result[0].deviceID, orderid: req.body.orderid, role: "customer" }, config.get('jwtPrivateKey'));

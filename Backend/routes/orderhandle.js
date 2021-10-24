@@ -1,6 +1,7 @@
 const authen = require('../middleware/authenticate');
 const ConnectDB = require('../middleware/database');
 const mapper = require('../middleware/ordersMap');
+const mqtt = require('../middleware/mqttclient');
 const Joi = require('joi');
 const express = require('express');
 const router = express.Router();
@@ -18,7 +19,7 @@ router.get('/list', authen, async (req, res) => {
             ConnectDB.query(sql, (err, result) => {
                 if (err) return res.status(400).send('db error');
                 else {
-                    return res.send(result); // sends the ongoing orders details
+                    return res.send(result[0]); // sends the ongoing orders details
                 }
             });
         }
@@ -31,9 +32,17 @@ router.get('/confirmed/:orderid', authen, (req, res) => {
     let { error } = schema.validate(req.params.orderid);
     if (error) return res.status(400).send("incorrect orderid");
 
-    let order_obj = mapper.find(req.params.orderid);
-    order_obj.confirm();
+    try {
+        let order_obj = mapper.find(req.params.orderid);
+        order_obj.confirm();
+    }
+    catch (excepction) {
+        return res.send(`not found ${req.params.orderid} ${excepction}`);
+    }
 
+
+    var data = { rfidUnlock: true };
+    mqtt.send2device(req.user.deviceid, data);
     res.send(`confirmed delivery of ${req.params.orderid}`);
 });
 
