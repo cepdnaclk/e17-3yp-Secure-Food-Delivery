@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'orderList.dart';
 import 'loginPageUser.dart';
 import 'loginPageRider.dart';
 
@@ -18,13 +19,18 @@ class _WelcomePageState extends State<WelcomePage> {
   @override
   void initState() {
     super.initState();
-    clearToken();
+    _checkLoginRider();
   }
 
-  clearToken() async {
+  _checkLoginRider() async {
     SharedPreferences Token = await SharedPreferences.getInstance();
-    Token.remove('riderToken');
     Token.remove('userToken');
+    if (Token.getString("riderToken") != null) {
+      if (Token.getBool('login') == true) {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => OrderList(title: '')));
+      }
+    }
   }
 
   Widget _title() {

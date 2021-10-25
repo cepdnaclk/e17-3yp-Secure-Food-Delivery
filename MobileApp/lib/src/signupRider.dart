@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+
 import 'dart:convert';
 
 import 'WelcomePage.dart';
@@ -41,9 +42,6 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
       headers: {"Content-Type": "application/json"},
       body: body,
     );
-
-    print(response.body);
-    print(response.statusCode);
     return response;
   }
 
@@ -52,17 +50,13 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
         onTap: () async {
           if (_formKeySignupRider.currentState!.validate()) {
             _formKeySignupRider.currentState!.save();
-            print(name.text);
-            print(contact.text);
-            print(deviceid.text);
-            print(password.text);
             final http.Response response = await postData(
                 name.text, contact.text, deviceid.text, password.text);
             if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Registered Successfully!!!'),
+                  title: const Text('Registered Successfully'),
                   content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
@@ -74,7 +68,13 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
                           ),
                         ),
                       ),
-                      child: const Text('Ok'),
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -87,17 +87,14 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
                   content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
-                      child: const Text('Cancel'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                       onPressed: () => Navigator.pop(context),
-                    ),
-                    TextButton(
-                      child: const Text('Go to Main Page'),
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
                     ),
                   ],
                 ),
@@ -111,16 +108,13 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -133,7 +127,14 @@ class _SignUpPageRiderState extends State<SignUpPageRider> {
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Try Again'),
+                      child: const Text(
+                        'Try Again',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ],
                 ),

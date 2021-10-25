@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'dart:convert';
-import 'dart:async';
 
-import 'WelcomePage.dart';
+import 'dart:async';
+import 'dart:convert';
+
 import 'unlockPage.dart';
 import 'Widget/body.dart';
+import 'WelcomePage.dart';
 import 'Widget/appbar.dart';
 import 'Widget/textForm.dart';
 import 'Widget/bottomlink.dart';
@@ -55,13 +56,10 @@ class _LoginPageState extends State<LoginPageUser> {
     );
     if (response.statusCode == 200) {
       token = response.body;
-      print(token);
       setState(() {
-        // _isLoading = false;
         userToken.setString("userToken", token);
       });
     }
-    print(response.statusCode);
     return response;
   }
 
@@ -70,16 +68,13 @@ class _LoginPageState extends State<LoginPageUser> {
         onTap: () async {
           if (_formKeyLoginUser.currentState!.validate()) {
             _formKeyLoginUser.currentState!.save();
-            print(contact.text);
-            print(orderid.text);
 
             final response = await postData(contact.text, orderid.text);
-            print(response.body);
             if (response.statusCode == 200) {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Successfully!!!'),
+                  title: const Text('Login Successfully'),
                   content: const Text(''),
                   actions: <Widget>[
                     TextButton(
@@ -91,7 +86,13 @@ class _LoginPageState extends State<LoginPageUser> {
                           ),
                         ),
                       ),
-                      child: const Text('Ok'),
+                      child: const Text(
+                        'Ok',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -101,21 +102,18 @@ class _LoginPageState extends State<LoginPageUser> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Error!!!'),
+                  title: const Text('Login Error'),
                   content: Text(response.body),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -124,21 +122,18 @@ class _LoginPageState extends State<LoginPageUser> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Login Error!!!'),
+                  title: const Text('Login Error'),
                   content: const Text('Order Processed Already'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => WelcomePage(
-                                    title: '',
-                                  ))),
-                      child: const Text('Go to Main Page'),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                        ),
+                      ),
                     ),
                   ],
                 ),
@@ -147,11 +142,18 @@ class _LoginPageState extends State<LoginPageUser> {
               showDialog<String>(
                 context: context,
                 builder: (BuildContext context) => AlertDialog(
-                  title: const Text('Something Went Wrong!!!'),
+                  title: const Text('Something Went Wrong'),
                   actions: <Widget>[
                     TextButton(
                       onPressed: () => Navigator.pop(context),
-                      child: const Text('Try Again'),
+                      child: const Text(
+                        'Try Again',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w700,
+                          fontSize: 20.0,
+                          color: Colors.red,
+                        ),
+                      ),
                     ),
                   ],
                 ),
