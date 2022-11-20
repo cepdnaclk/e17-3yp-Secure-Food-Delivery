@@ -20,8 +20,11 @@ router.post('/unlock', authen, (req, res) => {
     // state validation
     if (state != 'confirmed') return res.status(401).send('error : rider on the way.. needs to confirm');
     else {
-        var data = { unlockNow: true };
-        mqtt.send2device(order_obj.deviceid, data); //sends unlocking signal to device
+        var data = {
+            orderid: req.user.orderid,
+            otp: true
+        };
+        mqtt.send2device(`${order_obj.deviceid}/unlock/otp`, JSON.stringify(data)); //sends unlocking signal to device
         order_obj.done();
         mapper.del(req.user.orderid);
         return res.send(`unlocked ${order_obj.deviceid}`);
