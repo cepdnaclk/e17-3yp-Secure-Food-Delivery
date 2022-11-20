@@ -1,15 +1,17 @@
-import 'package:example_flutter_project/src/orderList.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter/services.dart';
 import 'dart:io';
 
-import 'src/welcomePage.dart';
+import 'package:login/pages/welcome/welcome.dart';
 
 void main() {
+  //ensure that the rotation is turned off
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
-  runApp(MyApp());
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]).then((value) => runApp(const MyApp()));
 }
 
 class MyHttpOverrides extends HttpOverrides {
@@ -22,18 +24,19 @@ class MyHttpOverrides extends HttpOverrides {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
     return MaterialApp(
-        title: 'Secure Food Delivery',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          textTheme: GoogleFonts.latoTextTheme(textTheme).copyWith(
-            bodyText1: GoogleFonts.montserrat(textStyle: textTheme.bodyText1),
-          ),
-        ),
-        debugShowCheckedModeBanner: false,
-        home: WelcomePage(title: ''));
+      title: 'Secure Food Delivery',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: const Color(0xFF2661FA),
+        scaffoldBackgroundColor: Colors.white,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      home: const WelcomePage(),
+    );
   }
 }
