@@ -22,9 +22,14 @@ router.post('/rider', async (req, res) => {
         if (!result.length | err) return res.status(400).send("not registered");
         else {
             bcrypt.compare(req.body.password, result[0].rpassword).then((result) => {
+                console.log(result[0]);
                 if (!result) return res.status(400).send("invalid mobile number or password");
                 else {
-                    const rtoken = jwt.sign({ mobno: req.body.mobno, deviceid: result[0].deviceID, role: "rider" }, config.get('jwtPrivateKey'));
+                    const rtoken = jwt.sign({
+                        mobno: req.body.mobno,
+                        deviceid: result[0].deviceID,
+                        role: "rider"
+                    }, config.get('jwtPrivateKey'));
                     return res.send(rtoken);
                 }
             });

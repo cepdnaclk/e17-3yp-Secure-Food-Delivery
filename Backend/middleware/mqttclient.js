@@ -3,24 +3,17 @@ const fs = require('fs');
 const ConnectDB = require('./database');
 const sms = require('./sms');
 
-var caFile = fs.readFileSync("../certs/mqtt/AmazonRootCA1.pem");
-var certFile = fs.readFileSync("../certs/mqtt/server_certificate.pem.crt");
-var keyFile = fs.readFileSync("../certs/mqtt/server_private.pem.key");
-
-var opts = {
-    connectTimeout: 5000,
-    ca: [caFile],
-    cert: certFile,
-    key: keyFile,
-    qos: 1,
+var options = {
+    host: 'f8b365f4facf4c80bafb40a579725058.s2.eu.hivemq.cloud',
     port: 8883,
-    clientId: 'api',
-    clean: false
+    protocol: 'mqtts',
+    username: 'teamsfd',
+    password: 'sfd@3yp22'
 }
 
-const client = mqtt.connect('mqtts://a32npcehyv5ifz-ats.iot.us-east-1.amazonaws.com:8883', opts);
+var client = mqtt.connect("mqtt://broker.hivemq.com");
 
-var topics = ['sfd0001'];
+var topics = ['sfd0001', 'sfd0002', 'sfd0003'];
 
 client.on('connect', () => {
     for (var count = 0; count < topics.length; count++) {
@@ -40,7 +33,7 @@ client.on("message", (topic, message) => {
         // do the thing what has to be done when an unauthorized access has detetcted
         var sql = `SELECT mobNo FROM order_handle WHERE order_handle.deviceID = "${topic}" and order_handle.state = 'on-going'`;
         ConnectDB.query(sql, (err, result) => {
-            if (err) console.log(`failed to send current orders to ${topic}`);
+            if (err) console.log(`No ongoing-orders`);
             else {
                 var msg = `Un-Athorized access has detected on your food carrier - ${topic}.\nIf your food not received, please contact restaurant immediately.\n\nSFD Team`;
                 for (var i = 0; i < result[0]; i++) {
@@ -51,6 +44,7 @@ client.on("message", (topic, message) => {
     }
 
     if (message.reqOrder) {
+        console.log("req order");
         // do the thing when requesting orders at initial state
         // deviceID should be the topic
         var sql = `SELECT orderID, rfidCode, state FROM order_handle WHERE order_handle.deviceID = "${topic}" and order_handle.state = 'on-going'`;
@@ -65,11 +59,26 @@ client.on("message", (topic, message) => {
                     recvOrder: true,
                     body: array
                 };
-                send2device(topic, data);
+                send2device(topic, JSON.stringify(data));
             }
         });
     }
+
+    if (message.service_open) {
+        var sql = `SELECT mobNo FROM order_handle WHERE order_handle.deviceID = "${topic}" and order_handle.state = 'on-going'`;
+        ConnectDB.query(sql, (err, result) => {
+            if (err) console.log(`Error with database`);
+            else {
+                if (result.length == 0) {
+                    send2device(`${topic}/unlock/service_open`, { "service_open": "true" });
+                }
+            }
+        });
+    }
+    
 });
+
+send2device("sfd")
 
 
 module.exports.send2device = send2device;

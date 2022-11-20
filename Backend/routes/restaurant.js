@@ -34,21 +34,21 @@ router.post('/new-order', async (req, res) => {
 
             sms.sendOTP(req.body.ctelno, otp_num); // send OTP through sms
 
-            var data2device = {
-                recvOrder: true,
-                body: [order.id, "", order.state]
-            }
+            let sql = `SELECT rfid FROM reg_customer WHERE reg_customer.mobNo = "${req.body.ctelno}"`;
+            ConnectDB.query(sql, async (err, result) => {
+                if (err) return console.log(err.message);
+                else {
+                    if (result.length != 0) {
+                        var data2device = {
+                            orderid: req.body.orderid,
+                            rfid: result[0].rifd,
+                            status: order.viewState
+                        }
 
-            mqtt.send2device(order.deviceid, data2device);
-
-            // let sql = `CALL device_mqtt("${req.body.deviceid}")`;
-            // ConnectDB.query(sql, async (err, result) => {
-            //     if (err) return console.log(err.message);
-            //     else {
-            //         let mqttid = result[0].mqttID;
-            //         //mqtt.orders(mqttid, req.body.orderid, '');  //sends rfid tag code along with the device id and order id to device
-            //     }
-            // });
+                        mqtt.send2device(`${order.deviceid}/new_order`, JSON.stringify(data2device));
+                    }
+                }
+            });
 
             mapper.add(req.body.orderid, order); // add new order obj into server's ds
 
