@@ -41,8 +41,11 @@ router.get('/confirmed/:orderid', authen, (req, res) => {
     }
 
 
-    var data = { rfidUnlock: true };
-    mqtt.send2device(req.user.deviceid, data);
+    var data = {
+        orderid: req.params.orderid,
+        rfid: true
+    };
+    mqtt.send2device(`${req.user.deviceid}/unlock/rfid`, JSON.stringify(data));
     res.send(`confirmed delivery of ${req.params.orderid}`);
 });
 
